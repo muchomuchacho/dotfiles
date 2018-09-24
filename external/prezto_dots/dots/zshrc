@@ -1,0 +1,24 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# asdf
+source $HOME/.asdf/asdf.sh
+source $HOME/.asdf/completions/asdf.bash
+
+# Load shell functions, exports and other dotfiles
+for file in ~/.{path,functions,extra,exports,alias}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done

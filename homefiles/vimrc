@@ -1,0 +1,149 @@
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+" Start plugin section
+call plug#begin('~/.local/share/nvim/plugged')
+
+" Aesthetics
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'
+
+" Functionality
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+if has('nvim')
+    Plug 'Shougo/neoinclude.vim'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+endif
+Plug 'neomake/neomake'
+Plug 'simnalamburt/vim-mundo'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+" Colorscheme
+Plug 'iCyMind/NeoSolarized'
+
+" Git
+Plug 'airblade/vim-gitgutter'
+
+" End of plugin section
+call plug#end()
+
+""" Python3 VirtualEnv
+let g:python_host_prog = expand('/usr/local/bin/python')
+let g:python3_host_prog = expand('/usr/local/bin/python3')
+
+" Executing python scripts
+nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
+
+" Colorscheme section
+syntax on
+set termguicolors
+colorscheme NeoSolarized
+set background=dark
+
+" Enable persistent history undo so that it persists across vim sessions
+set undofile
+set undodir=~/.local/share/undo
+nnoremap <F5> :MundoToggle<CR>
+
+""" neomake
+call neomake#configure#automake('w')
+let g:neomake_open_list = 2
+
+"" ripgrep
+if executable('rg')
+  "" Set default grep to ripgrep
+  set grepprg=rg\ --vimgrep
+
+  "" Set default ripgrep configs for fzf
+  "# --files: List files that would be searched but do not search
+  "# --no-ignore: Do not respect .gitignore, etc...
+  "# --hidden: Search hidden files and folders
+  "# --follow: Follow symlinks
+  "# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+  let $FZF_DEFAULT_COMMAND ='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+  
+  "" Define custom :Find command to leverage rg
+  " --column: Show column number
+  " --line-number: Show line number
+  " --no-heading: Do not show file headings in results
+  " --fixed-strings: Search term as a literal string
+  " --ignore-case: Case insensitive search
+  " --no-ignore: Do not respect .gitignore, etc...
+  " --hidden: Search hidden files and folders
+  " --follow: Follow symlinks
+  " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+  " --color: Search color options
+  command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%'): fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
+endif
+
+set nocompatible            " Disable compatibility to old-time vi
+set showmatch               " Show matching brackets.
+set number                  " add line numbers
+set cursorline
+set encoding=utf-8
+set wildmode=longest,list   " get bash-like tab completions
+filetype plugin indent on
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab autoindent
+set incsearch ignorecase smartcase hlsearch
+
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+    
+"" Deoplete
+"
+" Auto complete with C-Space
+inoremap <silent><expr> <C-Space>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<C-Space>" :
+        \ deoplete#manual_complete()
+
+function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+"}}}
+
+" Auto close preview when done
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+if !exists('g:deoplete#sources')
+    let g:deoplete#sources = {}
+endif
+if !exists('g:deoplete#keyword_patterns')
+    let g:deoplete#keyword_patterns = {}
+endif
+if !exists('g:deoplete#omni#input_patterns')
+    let g:deoplete#omni#input_patterns = {}
+endif
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+
+" Set allowed sources
+let g:deoplete#sources._ = ['buffer', 'member', 'file', 'tag', 'omni']
+let g:deoplete#sources.python = ['buffer', 'member', 'file', 'omni']
+" Set default keyword pattern (vim regex)
+let g:deoplete#keyword_patterns['default'] = '\h\w*'
+" Set omni patters for deoplete (python3 regex)
+let g:deoplete#omni#input_patterns.python = '([^. \t]\.|^\s*@|^\s*from\s.+ import |^\s*from |^\s*import )\w*'
+
+" Be extra sure that jedi works
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+let g:jedi#show_call_signatures = 0
+let g:jedi#smart_auto_mappings = 0
+
+" Disable documentation window
+set completeopt-=preview
