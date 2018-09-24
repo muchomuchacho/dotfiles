@@ -42,7 +42,7 @@ topdir="$(git rev-parse --show-toplevel)"
 dir=~/.dotfiles                    # dotfiles directory
 olddir=~/.dotfiles_old             # old dotfiles backup directory
 # list of files/folders to symlink in homedir
-home_files=(functions exports alias vimrc vim gitignore_global)
+home_files=(functions exports alias vimrc tmux.conf gitignore_global)
 
 if [ "${HOSTTYPE}" != "Linux" ]; then
     home_files=(${home_files} gvimrc-nonlinux)
