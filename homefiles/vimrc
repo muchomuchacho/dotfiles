@@ -45,6 +45,9 @@ set termguicolors
 colorscheme NeoSolarized
 set background=dark
 
+" Clear search highlighting
+nnoremap <silent> <C-c> :let @/=""<CR><C-l>
+
 " Enable persistent history undo so that it persists across vim sessions
 set undofile
 set undodir=~/.local/share/undo
