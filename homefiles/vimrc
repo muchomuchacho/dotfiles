@@ -25,14 +25,19 @@ Plug 'junegunn/fzf.vim'
 
 " Colorscheme
 Plug 'iCyMind/NeoSolarized'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'morhetz/gruvbox'
 
 " Git
 Plug 'airblade/vim-gitgutter'
 
+" Syntax highlighting
+Plug 'vim-python/python-syntax'
+
 " End of plugin section
 call plug#end()
 
-""" Python3 VirtualEnv
+""" Python VirtualEnv
 let g:python_host_prog = expand('/usr/local/bin/python')
 let g:python3_host_prog = expand('/usr/local/bin/python3')
 
@@ -41,9 +46,14 @@ nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
 " Colorscheme section
 syntax on
-set termguicolors
-colorscheme NeoSolarized
+" set termguicolors
 set background=dark
+" colorscheme NeoSolarized
+" colorscheme PaperColor
+colorscheme gruvbox
+
+" Python syntax highlighting
+let g:python_highlight_all = 1
 
 " Clear search highlighting
 nnoremap <silent> <C-c> :let @/=""<CR><C-l>
@@ -147,6 +157,17 @@ let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
 let g:jedi#show_call_signatures = 0
 let g:jedi#smart_auto_mappings = 0
+
+""" Kite stuff
+let g:kite_auto_complete=1
+let g:kite_tab_complete=1
+
+set completeopt-=menu
+set completeopt+=menuone   " show the popup menu even when there is only 1 match
+set completeopt-=longest   " don't insert the longest common text
+set completeopt+=preview   " don't show preview window
+set completeopt+=noinsert  " don't insert any text until user chooses a match
+set completeopt-=noselect  " select first match
 
 " Disable documentation window
 set completeopt-=preview
