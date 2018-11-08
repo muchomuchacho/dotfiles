@@ -22,3 +22,6 @@ source $HOME/.asdf/completions/asdf.bash
 for file in ~/.{path,functions,extra,exports,alias}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done
+
+# pipenv stuffs
+eval "$(pipenv --completion)"
