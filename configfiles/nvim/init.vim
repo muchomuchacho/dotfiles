@@ -1,1 +1,1 @@
-/Users/rafa/.dotfiles/homefiles/vimrc
+$HOME/.dotfiles/homefiles/vimrc
