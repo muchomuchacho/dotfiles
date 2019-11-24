@@ -13,6 +13,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
+Plug 'davidhalter/jedi-vim'
 if has('nvim')
     Plug 'Shougo/neoinclude.vim'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -36,6 +37,32 @@ Plug 'vim-python/python-syntax'
 
 " End of plugin section
 call plug#end()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = ' '
+nnoremap <silent> <leader>q :bd<Cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" make the clipboard available across apps
+set clipboard+=unnamed
+
+set nocompatible            " Disable compatibility to old-time vi
+set showmatch               " Show matching brackets.
+set number                  " add line numbers
+set cursorline
+set encoding=utf-8
+set wildmode=longest,list   " get bash-like tab completions
+filetype plugin indent on
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab autoindent
+set incsearch ignorecase smartcase hlsearch
+
+" Quickly open a markdown buffer for scribble
+map <leader>x :e ~/Seafile/logbook/logbook.md<cr>
+
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 
 """ Python VirtualEnv
 let g:python_host_prog = expand('/usr/local/bin/python')
@@ -64,45 +91,77 @@ set undodir=~/.local/share/undo
 nnoremap <F5> :MundoToggle<CR>
 
 """ neomake
+let g:neomake_python_pylint_maker = {
+  \ 'args': [
+  \ '-d', 'C0103, C0111',
+  \ '-f', 'text',
+  \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}"',
+  \ '-r', 'n'
+  \ ],
+  \ 'errorformat':
+  \ '%A%f:%l:%c:%t: %m,' .
+  \ '%A%f:%l: %m,' .
+  \ '%A%f:(%l): %m,' .
+  \ '%-Z%p^%.%#,' .
+  \ '%-G%.%#',
+  \ }
+
+let g:neomake_python_enabled_makers = ['flake8']
 call neomake#configure#automake('w')
 let g:neomake_open_list = 2
 
-"" ripgrep
-if executable('rg')
-  "" Set default grep to ripgrep
-  set grepprg=rg\ --vimgrep
+"" fzf
+" Command for git grep
+" - fzf#vim#grep(command, with_column, [options], [fullscreen])
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number --color=always '.shellescape(<q-args>), 0,
+  \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
 
-  "" Set default ripgrep configs for fzf
-  "# --files: List files that would be searched but do not search
-  "# --no-ignore: Do not respect .gitignore, etc...
-  "# --hidden: Search hidden files and folders
-  "# --follow: Follow symlinks
-  "# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-  let $FZF_DEFAULT_COMMAND ='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-  
-  "" Define custom :Find command to leverage rg
-  " --column: Show column number
-  " --line-number: Show line number
-  " --no-heading: Do not show file headings in results
-  " --fixed-strings: Search term as a literal string
-  " --ignore-case: Case insensitive search
-  " --no-ignore: Do not respect .gitignore, etc...
-  " --hidden: Search hidden files and folders
-  " --follow: Follow symlinks
-  " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-  " --color: Search color options
-  command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%'): fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
-endif
+" Apply fzf#vim#grep to use ripgrep:
+command! -bang -nargs=* Rgw
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
 
-set nocompatible            " Disable compatibility to old-time vi
-set showmatch               " Show matching brackets.
-set number                  " add line numbers
-set cursorline
-set encoding=utf-8
-set wildmode=longest,list   " get bash-like tab completions
-filetype plugin indent on
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab autoindent
-set incsearch ignorecase smartcase hlsearch
+command! -bang -nargs=* Rtags
+  \ call fzf#vim#tags(
+  \   expand('<cword>'),
+  \   <bang>0)
+
+nnoremap <silent> <C-g> :Rgw<Cr>
+nnoremap <silent> <leader>o :Files<Cr>
+nnoremap <silent> <leader>b :Buffers<Cr>
+nnoremap <silent> <leader>e :GGrep<Cr>
+nnoremap <silent> <Leader>d :GFiles?<Cr>
+nnoremap <silent> <Leader>t :Tags<Cr>
+nnoremap <silent> <Leader>c :Commits<CR>
+nnoremap <silent> <Leader>bc :BCommits<CR>
+nnoremap <silent> W :call GrepForWord("Rgw")<CR>
+nnoremap <silent> T :call GrepForWord("GGrep")<CR>
+vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
+nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <silent> <Leader>g :Rtags<CR>
+
+let g:fzf_commits_log_options = '--graph --color=always
+  \ --format="%C(yellow)%h%C(red)%d%C(reset)
+  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+
+function! GrepForWord(cmd)
+  execute a:cmd expand('<cword>')
+endfunction
+
+function! SearchVisualSelectionWithAg() range
+  let old_reg = getreg('"')
+  let old_regtype = getregtype('"')
+  let old_clipboard = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', old_reg, old_regtype)
+  let &clipboard = old_clipboard
+  execute 'Rg' selection
+endfunction
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -142,25 +201,30 @@ endif
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 
-" Set allowed sources
-let g:deoplete#sources._ = ['buffer', 'member', 'file', 'tag', 'omni']
-let g:deoplete#sources.python = ['buffer', 'member', 'file', 'omni']
-" Set default keyword pattern (vim regex)
-let g:deoplete#keyword_patterns['default'] = '\h\w*'
-" Set omni patters for deoplete (python3 regex)
-let g:deoplete#omni#input_patterns.python = '([^. \t]\.|^\s*@|^\s*from\s.+ import |^\s*from |^\s*import )\w*'
+" " Set allowed sources
+" let g:deoplete#sources._ = ['buffer', 'member', 'file', 'tag', 'omni']
+" let g:deoplete#sources.python = ['buffer', 'member', 'file', 'omni']
+" " Set default keyword pattern (vim regex)
+" let g:deoplete#keyword_patterns['default'] = '\h\w*'
+" " Set omni patters for deoplete (python3 regex)
+" let g:deoplete#omni#input_patterns.python = '([^. \t]\.|^\s*@|^\s*from\s.+ import |^\s*from |^\s*import )\w*'
 
 " Be extra sure that jedi works
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
-let g:jedi#show_call_signatures = 0
+let g:jedi#show_call_signatures = 1
 let g:jedi#smart_auto_mappings = 0
 
-""" Kite stuff
-let g:kite_auto_complete=1
-let g:kite_tab_complete=1
+" Disable Jedi-vim autocompletion and enable call-signatures options
+let g:jedi#auto_initialization = 1
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "1"
 
 set completeopt-=menu
 set completeopt+=menuone   " show the popup menu even when there is only 1 match
@@ -171,3 +235,24 @@ set completeopt-=noselect  " select first match
 
 " Disable documentation window
 set completeopt-=preview
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
