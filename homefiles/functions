@@ -128,5 +128,5 @@ function lb() {
         echo "Continue with todays one...: $journalfile"
         echo "### "${NOW} >> $journalfile
     fi
-    vim $journalfile
+    nvim $journalfile
 }
