@@ -5,12 +5,16 @@
 
 HOSTTYPE=$(uname -s)
 
-if [ "${SHELL}" != /bin/zsh ]; then
+if [ "${SHELL}" != $(which zsh) ]; then
     echo "This script needs to be run from a zsh shell"
     echo "Setting up ZSH as the default shell..."
     echo "Please open a new iTerm window and re-run this script"
     chsh -s $(which zsh)
     exit 1
+fi
+
+if ! command_exists curl && [[ "${HOSTTYPE}" = "Linux" ]]; then
+    sudo apt-get install -y curl
 fi
 
 # Helper functions
