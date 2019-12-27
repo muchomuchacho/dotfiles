@@ -1,7 +1,17 @@
-" Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
+if v:progname == 'vi'
+  set noloadplugins
+endif
+
+let mapleader = "\<Space>"
+
 " - Avoid using standard Vim directory names like 'plugin'
-" Start plugin section
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Start plugin section
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible            " Disable compatibility to old-time vi
+filetype off
+
 call plug#begin('~/.local/share/nvim/plugged')
 
 " Aesthetics
@@ -10,54 +20,91 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 
 " Functionality
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'davidhalter/jedi-vim'
-if has('nvim')
-    Plug 'Shougo/neoinclude.vim'
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'zchee/deoplete-jedi', { 'for': 'python' }
-endif
 Plug 'neomake/neomake'
 Plug 'simnalamburt/vim-mundo'
+
+" Fuzzy finder
+Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" Semantic language support
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Colorscheme
 Plug 'iCyMind/NeoSolarized'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
 
-" Git
-Plug 'airblade/vim-gitgutter'
+" Syntactic language support
+Plug 'cespare/vim-toml'
+Plug 'stephpy/vim-yaml'
+Plug 'plasticboy/vim-markdown'
 
-" Syntax highlighting
-Plug 'vim-python/python-syntax'
-
-" End of plugin section
 call plug#end()
 
+" if has('nvim')
+"     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+"     set inccommand=nosplit
+"     noremap <C-q> :confirm qall<CR>
+" end
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
+" # Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let mapleader = ' '
 nnoremap <silent> <leader>q :bd<Cr>
+nnoremap <silent> <leader>o :only<Cr>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+vmap <silent><C-x> <Plug>Commentary
+nmap <silent><C-x> <Plug>Commentary
 
-" make the clipboard available across apps
-set clipboard+=unnamed
+" Open hotkeys
+map <C-p> :Files<CR>
+nmap <leader>; :Buffers<CR>
 
-set nocompatible            " Disable compatibility to old-time vi
+set clipboard+=unnamed      " make the clipboard available across apps
+
 set showmatch               " Show matching brackets.
 set number                  " add line numbers
-set cursorline
+
+if exists('+relativenumber')
+    set relativenumber
+endif
+
 set encoding=utf-8
 set wildmode=longest,list   " get bash-like tab completions
-filetype plugin indent on
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab autoindent
+set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
+
+if exists('$SUDO_USER')
+    set noswapfile
+else
+    set directory=~/.local/nvim/tmp/swap//
+    set directory+=~/.config/nvim/tmp/swap//      " keep swap files out of the way
+    set directory+=/.
+endif
+
+if exists('&belloff')
+    set belloff=all
+endif
+
+" Proper search
 set incsearch ignorecase smartcase hlsearch
+
+" Search results centered please
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+
+" Very magic by default
+nnoremap ? ?\v
+nnoremap / /\v
+cnoremap %s/ %sm/
 
 " Quickly open a markdown buffer for scribble
 map <leader>x :e ~/Seafile/logbook/logbook.md<cr>
@@ -71,19 +118,37 @@ let g:python3_host_prog = expand('/usr/local/bin/python3')
 " Executing python scripts
 nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
-" Colorscheme section
+if &loadplugins
+    if has('packages')
+        packadd! scalpel
+    endif
+endif
+
+filetype indent plugin on
 syntax on
+
+" Colorscheme section
 " set termguicolors
 set background=dark
 " colorscheme NeoSolarized
 " colorscheme PaperColor
 colorscheme gruvbox
 
-" Python syntax highlighting
-let g:python_highlight_all = 1
+if exists('+colorcolumn')
+    " Highlight up to 255 columns (this is the current Vim max) beyond
+    " textwidth
+    let &l:colorcolumn='+' . join(range(0, 254), ',+')
+endif
 
 " Clear search highlighting
 nnoremap <silent> <C-c> :let @/=""<CR><C-l>
+
+set highlight+=o:ColorColumn
+set highlight+=n:LineNr
+set highlight+=T:DiffText
+set highlight+=i:IncSearch
+
+set cursorline
 
 " Enable persistent history undo so that it persists across vim sessions
 set undofile
@@ -130,18 +195,17 @@ command! -bang -nargs=* Rtags
   \   <bang>0)
 
 nnoremap <silent> <C-g> :Rgw<Cr>
-nnoremap <silent> <leader>o :Files<Cr>
 nnoremap <silent> <leader>b :Buffers<Cr>
-nnoremap <silent> <leader>e :GGrep<Cr>
+nnoremap <silent> <leader>t :GGrep<Cr>
 nnoremap <silent> <Leader>d :GFiles?<Cr>
-nnoremap <silent> <Leader>t :Tags<Cr>
-nnoremap <silent> <Leader>c :Commits<CR>
+" nnoremap <silent> <Leader>t :Tags<Cr>
+nnoremap <silent> <Leader>cc :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
-nnoremap <silent> W :call GrepForWord("Rgw")<CR>
+nnoremap <leader> w :call GrepForWord("Rgw")<CR>
 nnoremap <silent> T :call GrepForWord("GGrep")<CR>
 vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
 nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-nnoremap <silent> <Leader>g :Rtags<CR>
+" nnoremap <silent> <Leader>g :Rtags<CR>
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
@@ -166,65 +230,43 @@ endfunction
 " Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#coc#enabled = 1
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
     
-"" Deoplete
-"
-" Auto complete with C-Space
-inoremap <silent><expr> <C-Space>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<C-Space>" :
-        \ deoplete#manual_complete()
+" Completion
+" Better display for messages
+set cmdheight=2
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+" always show signcolumns
+set signcolumn=yes
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort "{{{
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-"}}}
 
-" Auto close preview when done
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" Use <c-.> to trigger completion.
+inoremap <silent><expr> <c-.> coc#refresh()
 
-if !exists('g:deoplete#sources')
-    let g:deoplete#sources = {}
-endif
-if !exists('g:deoplete#keyword_patterns')
-    let g:deoplete#keyword_patterns = {}
-endif
-if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-endif
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-
-" " Set allowed sources
-" let g:deoplete#sources._ = ['buffer', 'member', 'file', 'tag', 'omni']
-" let g:deoplete#sources.python = ['buffer', 'member', 'file', 'omni']
-" " Set default keyword pattern (vim regex)
-" let g:deoplete#keyword_patterns['default'] = '\h\w*'
-" " Set omni patters for deoplete (python3 regex)
-" let g:deoplete#omni#input_patterns.python = '([^. \t]\.|^\s*@|^\s*from\s.+ import |^\s*from |^\s*import )\w*'
-
-" Be extra sure that jedi works
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#show_call_signatures = 1
-let g:jedi#smart_auto_mappings = 0
-
-" Disable Jedi-vim autocompletion and enable call-signatures options
-let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 set completeopt-=menu
 set completeopt+=menuone   " show the popup menu even when there is only 1 match
@@ -237,9 +279,135 @@ set completeopt-=noselect  " select first match
 set completeopt-=preview
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Editor settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autoindent
+set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
+set encoding=utf-8
+
+set scrolloff=3
+set shortmess+=I
+set shortmess+=A
+set shortmess+=a
+
+if has ('syntax')
+    set spellcapcheck=
+endif
+
+set noshowmode
+set hidden
+" set nowrap
+set wrap
+set nojoinspaces
+let g:sneak#s_next = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_frontmatter = 1
+set printfont=:h10
+set printencoding=utf-8
+set printoptions=paper:letter
+" Always draw sign column. Prevent buffer moving when adding/deleting sign.
+set signcolumn=yes
+" Sane splits
+if has('windows')
+    set splitbelow
+endif
+
+if has('vertsplit')
+    set splitright
+endif
+
+" Move around splits
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Line breaks
+if has('linebreak')
+    let &showbreak='⤷ '
+endif
+
+if has('linebreak')
+    set breakindent
+    if exists('&breakindentopt')
+        set breakindentopt=shift:2
+    endif
+endif
+
+if has('termguicolors')
+    set termguicolors    " use guifg/guibg instead of ctermfg/ctermbg in terminal
+endif
+
+set list
+set listchars=nbsp:⦸
+set listchars+=tab:▷┅
+set listchars+=extends:»
+set listchars+=precedes:«
+set listchars+=trail:•
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Keyboard
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" No arrow keys --- force yourself to use the home row
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
+" Move by line
+nnoremap j gj
+nnoremap k gk
+
+" Left and right can switch buffers
+nnoremap <left> :bp<CR>
+nnoremap <right> :bn<CR>
+
+" Jump to start and end of line using the home row keys
+map H ^
+map L $
+
+" Neat X clipboard integration
+" ,p will paste clipboard into buffer
+" ,c will copy entire buffer into clipboard
+noremap <leader>p :read !xsel --clipboard --output<cr>
+noremap <leader>c :w !xsel -ib<cr><cr>
+
+" 'Smart' nevigation
+nmap <silent> E <Plug>(coc-diagnostic-prev)
+nmap <silent> W <Plug>(coc-diagnostic-next)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" navigate chunks of current buffer
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+" show chunk diff at current position
+nmap gs <Plug>(coc-git-chunkinfo)
+" show commit contains current position
+nmap gc <Plug>(coc-git-commit)
+" create text object for git chunks
+omap ig <Plug>(coc-git-chunk-inner)
+xmap ig <Plug>(coc-git-chunk-inner)
+omap ag <Plug>(coc-git-chunk-outer)
+xmap ag <Plug>(coc-git-chunk-outer)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
     execute "normal! vgvy"
@@ -256,3 +424,23 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Auto commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leave paste mode when leaving insert mode
+autocmd InsertLeave * set nopaste
+
+" Jump to last edit position on opening file
+if has("autocmd")
+  " https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
+  au BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" Help filetype detection
+autocmd BufRead *.plot set filetype=gnuplot
+autocmd BufRead *.md set filetype=markdown
+autocmd BufRead *.lds set filetype=ld
+autocmd BufRead *.tex set filetype=tex
+autocmd BufRead *.trm set filetype=c
+autocmd BufRead *.xlsx.axlsx set filetype=ruby
