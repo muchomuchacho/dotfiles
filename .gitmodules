@@ -1,6 +1,3 @@
-[submodule "/Users/rafa/.dotfiles/configfiles/nvim/pack/scalpel/opt/scalpel"]
-	path = /Users/rafa/.dotfiles/configfiles/nvim/pack/scalpel/opt/scalpel
-	url = https://github.com/wincent/scalpel.git
 [submodule "configfiles/nvim/pack/scalpel/opt/scalpel"]
 	path = configfiles/nvim/pack/scalpel/opt/scalpel
 	url = https://github.com/wincent/scalpel.git
