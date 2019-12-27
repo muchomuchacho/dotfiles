@@ -39,11 +39,6 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
 
-" Syntactic language support
-Plug 'cespare/vim-toml'
-Plug 'stephpy/vim-yaml'
-Plug 'plasticboy/vim-markdown'
-
 call plug#end()
 
 " if has('nvim')
@@ -121,6 +116,10 @@ nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 if &loadplugins
     if has('packages')
         packadd! scalpel
+        " Syntactic language support
+        packadd! vim-toml
+        packadd! vim-yaml
+        packadd! vim-markdown
     endif
 endif
 
