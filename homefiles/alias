@@ -2,10 +2,20 @@
 # Aliases
 #
 
+# Unity
+alias nunity='open -na Unity'
+
 # Personal
+## exa -> https://github.com/ogham/exa
+alias l='exa -lg'
+alias ll='exa -lag'
+alias lt='exa -T'
+
+# misc
 alias edit='docker run -ti --rm -v $(pwd):/tmp docvim'
 alias vim='nvim'
 alias cat='bat'
 alias ping='prettyping --nolegend'
 alias du='ncdu --color dark -rr -x --exclude .git'
-alias nunity='open -na Unity'
+alias homevpn='sshuttle -r homevpn 0/0'
+alias plex='ssh plex'
