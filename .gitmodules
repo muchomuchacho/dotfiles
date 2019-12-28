@@ -10,3 +10,40 @@
 [submodule "configfiles/nvim/pack/bundle/opt/vim-markdown"]
 	path = configfiles/nvim/pack/bundle/opt/vim-markdown
 	url = https://github.com/plasticboy/vim-markdown.git
+[submodule "configfiles/nvim/pack/bundle/opt/vim-airline"]
+	path = configfiles/nvim/pack/bundle/opt/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule "configfiles/nvim/pack/bundle/opt/vim-airline-themes"]
+	path = configfiles/nvim/pack/bundle/opt/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes
+[submodule "configfiles/nvim/pack/bundle/opt/vim-devicons"]
+	path = configfiles/nvim/pack/bundle/opt/vim-devicons
+	url = https://github.com/ryanoasis/vim-devicons
+[submodule "configfiles/nvim/pack/bundle/opt/vim-commentary"]
+	path = configfiles/nvim/pack/bundle/opt/vim-commentary
+	url = https://github.com/tpope/vim-commentary
+[submodule "configfiles/nvim/pack/bundle/opt/vim-fugitive"]
+	path = configfiles/nvim/pack/bundle/opt/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "configfiles/nvim/pack/bundle/opt/vim-surround"]
+	path = configfiles/nvim/pack/bundle/opt/vim-surround
+	url = https://github.com/tpope/vim-surround
+[submodule "configfiles/nvim/pack/bundle/opt/neomake"]
+	path = configfiles/nvim/pack/bundle/opt/neomake
+	url = https://github.com/neomake/neomake
+[submodule "configfiles/nvim/pack/bundle/opt/vim-mundo"]
+	path = configfiles/nvim/pack/bundle/opt/vim-mundo
+	url = https://github.com/simnalamburt/vim-mundo
+[submodule "configfiles/nvim/pack/bundle/opt/fzf.vim"]
+	path = configfiles/nvim/pack/bundle/opt/fzf.vim
+	url = https://github.com/junegunn/fzf.vim
+[submodule "configfiles/nvim/pack/bundle/opt/vim-rooter"]
+	path = configfiles/nvim/pack/bundle/opt/vim-rooter
+	url = https://github.com/airblade/vim-rooter
+[submodule "configfiles/nvim/pack/bundle/opt/coc.nvim"]
+	path = configfiles/nvim/pack/bundle/opt/coc.nvim
+	url = https://github.com/neoclide/coc.nvim
+	branch = release
+[submodule "configfiles/nvim/pack/bundle/opt/gruvbox"]
+	path = configfiles/nvim/pack/bundle/opt/gruvbox
+	url = https://github.com/morhetz/gruvbox

@@ -4,42 +4,8 @@ endif
 
 let mapleader = "\<Space>"
 
-" - Avoid using standard Vim directory names like 'plugin'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" # Start plugin section
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible            " Disable compatibility to old-time vi
 filetype off
-
-call plug#begin('~/.local/share/nvim/plugged')
-
-" Aesthetics
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'ryanoasis/vim-devicons'
-
-" Functionality
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'neomake/neomake'
-Plug 'simnalamburt/vim-mundo'
-
-" Fuzzy finder
-Plug 'airblade/vim-rooter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-
-" Semantic language support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Colorscheme
-Plug 'iCyMind/NeoSolarized'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'morhetz/gruvbox'
-
-call plug#end()
 
 " if has('nvim')
 "     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
@@ -56,6 +22,9 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 vmap <silent><C-x> <Plug>Commentary
 nmap <silent><C-x> <Plug>Commentary
+
+" Add fzf executable to the Vim runtime
+source ~/.fzf/plugin/fzf.vim
 
 " Open hotkeys
 map <C-p> :Files<CR>
@@ -115,11 +84,28 @@ nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
 if &loadplugins
     if has('packages')
+        " Aesthetics
+        packadd! vim-airline
+        packadd! vim-airline-themes
+        packadd! vim-devicons
+        " Functionality
+        packadd! vim-commentary
+        packadd! vim-fugitive
+        packadd! vim-surround
+        packadd! neomake
+        packadd! vim-mundo
         packadd! scalpel
+        " Fuzzy finder
+        packadd! fzf.vim
+        packadd! vim-rooter
         " Syntactic language support
         packadd! vim-toml
         packadd! vim-yaml
         packadd! vim-markdown
+        " Semantic language support
+        packadd! coc.nvim
+        " Colorscheme
+        packadd! gruvbox
     endif
 endif
 
@@ -129,8 +115,6 @@ syntax on
 " Colorscheme section
 " set termguicolors
 set background=dark
-" colorscheme NeoSolarized
-" colorscheme PaperColor
 colorscheme gruvbox
 
 if exists('+colorcolumn')
