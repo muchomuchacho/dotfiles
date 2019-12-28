@@ -82,36 +82,6 @@ let g:python3_host_prog = expand('/usr/local/bin/python3')
 " Executing python scripts
 nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
-if &loadplugins
-    if has('packages')
-        " Aesthetics
-        packadd! vim-airline
-        packadd! vim-airline-themes
-        packadd! vim-devicons
-        " Functionality
-        packadd! vim-commentary
-        packadd! vim-fugitive
-        packadd! vim-surround
-        packadd! neomake
-        packadd! vim-mundo
-        packadd! scalpel
-        " Fuzzy finder
-        packadd! fzf.vim
-        packadd! vim-rooter
-        " Syntactic language support
-        packadd! vim-toml
-        packadd! vim-yaml
-        packadd! vim-markdown
-        " Semantic language support
-        packadd! coc.nvim
-        " Colorscheme
-        packadd! gruvbox
-    endif
-endif
-
-filetype indent plugin on
-syntax on
-
 " Colorscheme section
 " set termguicolors
 set background=dark
@@ -137,26 +107,6 @@ set cursorline
 set undofile
 set undodir=~/.local/share/undo
 nnoremap <F5> :MundoToggle<CR>
-
-""" neomake
-let g:neomake_python_pylint_maker = {
-  \ 'args': [
-  \ '-d', 'C0103, C0111',
-  \ '-f', 'text',
-  \ '--msg-template="{path}:{line}:{column}:{C}: [{symbol}] {msg}"',
-  \ '-r', 'n'
-  \ ],
-  \ 'errorformat':
-  \ '%A%f:%l:%c:%t: %m,' .
-  \ '%A%f:%l: %m,' .
-  \ '%A%f:(%l): %m,' .
-  \ '%-Z%p^%.%#,' .
-  \ '%-G%.%#',
-  \ }
-
-let g:neomake_python_enabled_makers = ['flake8']
-call neomake#configure#automake('w')
-let g:neomake_open_list = 2
 
 "" fzf
 " Command for git grep
@@ -221,7 +171,7 @@ endif
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-    
+
 " Completion
 " Better display for messages
 set cmdheight=2
@@ -427,3 +377,51 @@ autocmd BufRead *.lds set filetype=ld
 autocmd BufRead *.tex set filetype=tex
 autocmd BufRead *.trm set filetype=c
 autocmd BufRead *.xlsx.axlsx set filetype=ruby
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" # Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" They are installed as submodules
+"" `git submodule add <plugin URL> configfiles/nvim/pack/bundle/opt/<pluin name>`
+"" `git submodule update --init --recursive`
+
+if &loadplugins
+    if has('packages')
+        " Aesthetics
+        packadd! vim-airline
+        packadd! vim-airline-themes
+        packadd! vim-devicons
+        " Functionality
+        packadd! vim-commentary
+        packadd! vim-fugitive
+        packadd! vim-surround
+        packadd! neomake
+        packadd! vim-mundo
+        packadd! scalpel
+        " Fuzzy finder
+        packadd! fzf.vim
+        packadd! vim-rooter
+        " Syntactic language support
+        packadd! vim-toml
+        packadd! vim-yaml
+        packadd! vim-markdown
+        " Semantic language support
+        packadd! coc.nvim
+        " Colorscheme
+        packadd! gruvbox
+    endif
+endif
+
+" Must come *after* the `:packadd!` calls above otherwise the contents of
+" package "ftdetect" directories won't be evaluated.
+filetype indent plugin on
+syntax on
+
+" After this file is sourced, plugin code will be evaluated.
+" See ~/.vim/after for files evaluated after that.
+" See `:scriptnames` for a list of all scripts, in evaluation order.
+" Launch Vim with `vim --startuptime vim.log` for profiling info.
+"
+" To see all leader mappings, including those from plugins:
+"
+"   vim -c 'set t_te=' -c 'set t_ti=' -c 'map <space>' -c q | sort
