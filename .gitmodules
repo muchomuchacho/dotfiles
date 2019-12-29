@@ -47,3 +47,6 @@
 [submodule "configfiles/nvim/pack/bundle/opt/gruvbox"]
 	path = configfiles/nvim/pack/bundle/opt/gruvbox
 	url = https://github.com/morhetz/gruvbox
+[submodule "configfiles/nvim/pack/bundle/opt/vim-abolish"]
+	path = configfiles/nvim/pack/bundle/opt/vim-abolish
+	url = https://github.com/tpope/vim-abolish
