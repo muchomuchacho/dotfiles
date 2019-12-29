@@ -16,19 +16,11 @@ filetype off
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <silent> <leader>q :bd<Cr>
-nnoremap <silent> <leader>o :only<Cr>
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
 vmap <silent><C-x> <Plug>Commentary
 nmap <silent><C-x> <Plug>Commentary
 
 " Add fzf executable to the Vim runtime
 source ~/.fzf/plugin/fzf.vim
-
-" Open hotkeys
-map <C-p> :Files<CR>
-nmap <leader>; :Buffers<CR>
 
 set clipboard+=unnamed      " make the clipboard available across apps
 
@@ -58,29 +50,13 @@ endif
 " Proper search
 set incsearch ignorecase smartcase hlsearch
 
-" Search results centered please
-nnoremap <silent> n nzz
-nnoremap <silent> N Nzz
-nnoremap <silent> * *zz
-nnoremap <silent> # #zz
-nnoremap <silent> g* g*zz
-
-" Very magic by default
-nnoremap ? ?\v
-nnoremap / /\v
 cnoremap %s/ %sm/
-
-" Quickly open a markdown buffer for scribble
-map <leader>x :e ~/Seafile/logbook/logbook.md<cr>
 
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 
 """ Python VirtualEnv
 let g:python_host_prog = expand('/usr/local/bin/python')
 let g:python3_host_prog = expand('/usr/local/bin/python3')
-
-" Executing python scripts
-nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 
 " Colorscheme section
 " set termguicolors
@@ -103,11 +79,6 @@ set highlight+=i:IncSearch
 
 set cursorline
 
-" Enable persistent history undo so that it persists across vim sessions
-set undofile
-set undodir=~/.local/share/undo
-nnoremap <F5> :MundoToggle<CR>
-
 "" fzf
 " Command for git grep
 " - fzf#vim#grep(command, with_column, [options], [fullscreen])
@@ -128,6 +99,7 @@ command! -bang -nargs=* Rtags
   \   <bang>0)
 
 nnoremap <silent> <C-g> :Rgw<Cr>
+nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<Cr>
 nnoremap <silent> <leader>t :GGrep<Cr>
 nnoremap <silent> <Leader>d :GFiles?<Cr>
@@ -283,30 +255,14 @@ set listchars+=trail:•
 " # Keyboard
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " No arrow keys --- force yourself to use the home row
-nnoremap <up> <nop>
-nnoremap <down> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-" Move by line
-nnoremap j gj
-nnoremap k gk
-
-" Left and right can switch buffers
-nnoremap <left> :bp<CR>
-nnoremap <right> :bn<CR>
-
 " Jump to start and end of line using the home row keys
 map H ^
 map L $
-
-" Neat X clipboard integration
-" ,p will paste clipboard into buffer
-" ,c will copy entire buffer into clipboard
-noremap <leader>p :read !xsel --clipboard --output<cr>
-noremap <leader>c :w !xsel -ib<cr><cr>
 
 " 'Smart' nevigation
 nmap <silent> E <Plug>(coc-diagnostic-prev)
@@ -359,26 +315,6 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" # Auto commands
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Leave paste mode when leaving insert mode
-autocmd InsertLeave * set nopaste
-
-" Jump to last edit position on opening file
-if has("autocmd")
-  " https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
-  au BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
-
-" Help filetype detection
-autocmd BufRead *.plot set filetype=gnuplot
-autocmd BufRead *.md set filetype=markdown
-autocmd BufRead *.lds set filetype=ld
-autocmd BufRead *.tex set filetype=tex
-autocmd BufRead *.trm set filetype=c
-autocmd BufRead *.xlsx.axlsx set filetype=ruby
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " They are installed as submodules
@@ -396,7 +332,7 @@ if &loadplugins
         packadd! vim-fugitive
         packadd! vim-surround
         packadd! neomake
-        packadd! vim-mundo
+        " packadd! vim-mundo
         packadd! scalpel
         " Fuzzy finder
         packadd! fzf.vim
