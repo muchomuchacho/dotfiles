@@ -3,6 +3,7 @@ if v:progname == 'vi'
 endif
 
 let mapleader = "\<Space>"
+let maplocalleader="\\"
 
 set nocompatible            " Disable compatibility to old-time vi
 filetype off
