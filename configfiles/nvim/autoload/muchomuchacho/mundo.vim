@@ -1,5 +1,5 @@
 function! muchomuchacho#mundo#init() abort
-    " Enable persistent history undo so that it persists across vim sessions
-    set undofile
-    set undodir=~/.local/share/undo
+    let g:mundo_preview_height = 40
+    let g:mundo_right = 1
+    let g:mundo_preview_bottom = 1
 endfunction
