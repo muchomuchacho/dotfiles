@@ -6,112 +6,24 @@ let mapleader = "\<Space>"
 let maplocalleader="\\"
 
 set nocompatible            " Disable compatibility to old-time vi
-filetype off
-
-" if has('nvim')
-"     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
-"     set inccommand=nosplit
-"     noremap <C-q> :confirm qall<CR>
-" end
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" # Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vmap <silent><C-x> <Plug>Commentary
-nmap <silent><C-x> <Plug>Commentary
 
 " Add fzf executable to the Vim runtime
 source ~/.fzf/plugin/fzf.vim
 
-set clipboard+=unnamed      " make the clipboard available across apps
+" set clipboard+=unnamed      " make the clipboard available across apps
 
-set showmatch               " Show matching brackets.
-set number                  " add line numbers
+" set showmatch               " Show matching brackets.
 
-if exists('+relativenumber')
-    set relativenumber
-endif
-
-set encoding=utf-8
-set wildmode=longest,list   " get bash-like tab completions
-set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
-
-if exists('$SUDO_USER')
-    set noswapfile
-else
-    set directory=~/.local/nvim/tmp/swap//
-    set directory+=~/.config/nvim/tmp/swap//      " keep swap files out of the way
-    set directory+=/.
-endif
-
-if exists('&belloff')
-    set belloff=all
-endif
+" set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
 
 " Proper search
 set incsearch ignorecase smartcase hlsearch
 
 cnoremap %s/ %sm/
 
-vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
-
 """ Python VirtualEnv
 let g:python_host_prog = expand('/usr/local/bin/python')
 let g:python3_host_prog = expand('/usr/local/bin/python3')
-
-" Colorscheme section
-" set termguicolors
-set background=dark
-colorscheme gruvbox
-
-if exists('+colorcolumn')
-    " Highlight up to 255 columns (this is the current Vim max) beyond
-    " textwidth
-    let &l:colorcolumn='+' . join(range(0, 254), ',+')
-endif
-
-" Clear search highlighting
-nnoremap <silent> <C-c> :let @/=""<CR><C-l>
-
-set highlight+=o:ColorColumn
-set highlight+=n:LineNr
-set highlight+=T:DiffText
-set highlight+=i:IncSearch
-
-set cursorline
-
-"" fzf
-" Command for git grep
-" - fzf#vim#grep(command, with_column, [options], [fullscreen])
-command! -bang -nargs=* GGrep
-  \ call fzf#vim#grep(
-  \   'git grep --line-number --color=always '.shellescape(<q-args>), 0,
-  \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-
-" Apply fzf#vim#grep to use ripgrep:
-command! -bang -nargs=* Rgw
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
-
-command! -bang -nargs=* Rtags
-  \ call fzf#vim#tags(
-  \   expand('<cword>'),
-  \   <bang>0)
-
-nnoremap <silent> <C-g> :Rgw<Cr>
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>b :Buffers<Cr>
-nnoremap <silent> <leader>t :GGrep<Cr>
-nnoremap <silent> <Leader>d :GFiles?<Cr>
-" nnoremap <silent> <Leader>t :Tags<Cr>
-nnoremap <silent> <Leader>cc :Commits<CR>
-nnoremap <silent> <Leader>bc :BCommits<CR>
-nnoremap <leader> w :call GrepForWord("Rgw")<CR>
-nnoremap <silent> T :call GrepForWord("GGrep")<CR>
-vnoremap <silent> K :call SearchVisualSelectionWithAg()<CR>
-nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-" nnoremap <silent> <Leader>g :Rtags<CR>
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
@@ -119,18 +31,6 @@ let g:fzf_commits_log_options = '--graph --color=always
 
 function! GrepForWord(cmd)
   execute a:cmd expand('<cword>')
-endfunction
-
-function! SearchVisualSelectionWithAg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
-  execute 'Rg' selection
 endfunction
 
 " Airline
@@ -187,9 +87,6 @@ set completeopt-=preview
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Editor settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set autoindent
-set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
-set encoding=utf-8
 
 set scrolloff=3
 set shortmess+=I
@@ -241,80 +138,9 @@ if has('linebreak')
     endif
 endif
 
-if has('termguicolors')
-    set termguicolors    " use guifg/guibg instead of ctermfg/ctermbg in terminal
-endif
-
-set list
-set listchars=nbsp:⦸
-set listchars+=tab:▷┅
-set listchars+=extends:»
-set listchars+=precedes:«
-set listchars+=trail:•
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Keyboard
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" No arrow keys --- force yourself to use the home row
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-
-" Jump to start and end of line using the home row keys
-map H ^
-map L $
-
-" 'Smart' nevigation
-nmap <silent> E <Plug>(coc-diagnostic-prev)
-nmap <silent> W <Plug>(coc-diagnostic-next)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-" navigate chunks of current buffer
-nmap [g <Plug>(coc-git-prevchunk)
-nmap ]g <Plug>(coc-git-nextchunk)
-" show chunk diff at current position
-nmap gs <Plug>(coc-git-chunkinfo)
-" show commit contains current position
-nmap gc <Plug>(coc-git-commit)
-" create text object for git chunks
-omap ig <Plug>(coc-git-chunk-inner)
-xmap ig <Plug>(coc-git-chunk-inner)
-omap ag <Plug>(coc-git-chunk-outer)
-xmap ag <Plug>(coc-git-chunk-outer)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
