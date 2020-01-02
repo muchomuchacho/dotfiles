@@ -37,3 +37,41 @@ function! muchomuchacho#functions#SearchVisualSelectionWithAg() range
   execute 'Rg' selection
 endfunction
 
+function! muchomuchacho#functions#GrepForWord(cmd) abort
+  execute a:cmd expand('<cword>')
+endfunction
+
+" Turn on spell-check
+function! muchomuchacho#functions#spell() abort
+  if has('syntax')
+    setlocal spell
+    setlocal spellfile=~/.vim/spell/en.utf-8.add
+    setlocal spelllang=en,es
+  endif
+endfunction
+
+" Switch to plaintext
+function! muchomuchacho#functions#plaintext() abort
+  if has('conceal')
+    let b:indentLine_ConcealOptions=1 " Don't let indentLine overwrite
+    setlocal concealcursor=nc
+  endif
+  setlocal nolist
+  setlocal textwidth=0
+  setlocal wrap
+  setlocal wrapmargin=0
+
+  call muchomuchacho#functions#spell()
+
+  noremap <buffer> j gj
+  noremap <buffer> k gk
+
+  " Can't restrict `listchars` since it's global
+  " and we'd have to save and restore every time
+  if has('autocmd')
+    autocmd BufWinEnter <buffer> match Error /\s\+$/
+    autocmd InsertEnter <buffer> match Error /\s\+\%#\@<!$/
+    autocmd InsertLeave <buffer> match Error /\s\+$/
+    autocmd BufWinLeave <buffer> call clearmatches()
+  endif
+endfunction
