@@ -9,4 +9,4 @@ xnoremap <C-l> <C-w>l
 xnoremap <silent> * :<C-u>call muchomuchacho#functions#VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 
 " fzf
-xnoremap <silent> J :call muchomuchacho#functions#SearchVisualSelectionWithAg()()<CR>
+xnoremap <silent> J :call muchomuchacho#functions#SearchVisualSelectionWithAg()<CR>

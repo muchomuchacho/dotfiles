@@ -21,6 +21,12 @@ nnoremap <silent> <C-c> :let @/=""<CR><C-l>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 
+" Move around splits
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
 " Move by line
 nnoremap j gj
 nnoremap k gk
@@ -38,8 +44,8 @@ nnoremap <silent> <Leader>d :GFiles?<Cr>
 " nnoremap <silent> <Leader>t :Tags<Cr>
 nnoremap <silent> <Leader>cc :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
-nnoremap <leader> w :call GrepForWord("Rgw")<CR>
-nnoremap <silent> T :call GrepForWord("GGrep")<CR>
+nnoremap <localleader> w :call muchomuchacho#functions#GrepForWord("Rgw")<CR>
+nnoremap <silent> T :call muchomuchacho#functions#GrepForWord("GGrep")<CR>
 nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 " nnoremap <silent> <Leader>g :Rtags<CR>
 
