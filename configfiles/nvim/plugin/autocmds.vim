@@ -9,17 +9,25 @@ if has("autocmd")
             " Disable paste mode when leaving insert mode
             autocmd InsertLeave * set nopaste
 
-            " Jump to last edit position on opening file
-            " https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
-            au BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+            " Enable spellcheck for plaintext files
+            autocmd FileType plaintext setlocal spell spelllang=en_gb
 
-            " Help filetype detection
-            autocmd BufRead *.plot set filetype=gnuplot
-            autocmd BufRead *.md set filetype=markdown
-            autocmd BufRead *.lds set filetype=ld
-            autocmd BufRead *.tex set filetype=tex
-            autocmd BufRead *.trm set filetype=c
-            autocmd BufRead *.xlsx.axlsx set filetype=ruby
+            " " Help filetype detection
+            " autocmd BufRead *.plot set filetype=gnuplot
+            " autocmd BufRead *.md set filetype=markdown
+            " autocmd BufRead *.lds set filetype=ld
+            " autocmd BufRead *.tex set filetype=tex
+            " autocmd BufRead *.trm set filetype=c
+            " autocmd BufRead *.xlsx.axlsx set filetype=ruby
+
+            if has('folding')
+              " Like the autocmd described in `:h last-position-jump` but we add `:foldopen!`.
+              autocmd BufWinEnter * if line("'\"") > 1 && line("'\"") <= line('$') | execute "normal! g`\"" | execute 'silent! ' . line("'\"") . 'foldopen!' | endif
+            else
+              autocmd BufWinEnter * if line("'\"") > 1 && line("'\"") <= line('$') | execute "normal! g`\"" | endif
+              " autocmd BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+            endif
+
         augroup END
     endfunction
 
