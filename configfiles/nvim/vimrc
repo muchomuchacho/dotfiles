@@ -7,140 +7,63 @@ let maplocalleader="\\"
 
 set nocompatible            " Disable compatibility to old-time vi
 
+if has('nvim')
+    set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+    set inccommand=nosplit
+    noremap <C-q> :confirm qall<CR>
+end
+
 " Add fzf executable to the Vim runtime
 source ~/.fzf/plugin/fzf.vim
-
-" set clipboard+=unnamed      " make the clipboard available across apps
-
-" set showmatch               " Show matching brackets.
-
-" set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
-
-" Proper search
-set incsearch ignorecase smartcase hlsearch
 
 cnoremap %s/ %sm/
 
 """ Python VirtualEnv
-let g:python_host_prog = expand('/usr/local/bin/python')
-let g:python3_host_prog = expand('/usr/local/bin/python3')
+if filereadable('/usr/local/bin/python3')
+  let g:python3_host_prog = expand('/usr/local/bin/python3')
+endif
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
   \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 
-function! GrepForWord(cmd)
-  execute a:cmd expand('<cword>')
-endfunction
-
-" Airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-let g:airline#extensions#coc#enabled = 1
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+if has('viminfo') " ie. Vim.
+  let s:viminfo='viminfo'
+elseif has('shada') " ie. Neovim.
+  let s:viminfo='shada'
 endif
 
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+if exists('s:viminfo')
+  if exists('$SUDO_USER')
+    " Don't create root-owned files.
+    execute 'set ' . s:viminfo . '='
+  else
+    " Defaults:
+    "   Neovim: !,'100,<50,s10,h
+    "   Vim:    '100,<50,s10,h
+    "
+    " - ! save/restore global variables (only all-uppercase variables)
+    " - '100 save/restore marks from last 100 files
+    " - <50 save/restore 50 lines from each register
+    " - s10 max item size 10KB
+    " - h do not save/restore 'hlsearch' setting
+    "
+    " Our overrides:
+    " - '500 store marks for 500 files
+    " - <500 save 500 lines per register
+    " - f1 store file marks
+    " - n: store in ~/.vim/tmp
+    "
+    execute 'set ' . s:viminfo . "='200,<50,f1,s10,h,n~/.vim/tmp/" . s:viminfo
 
-" Completion
-" Better display for messages
-set cmdheight=2
-" You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
-" always show signcolumns
-set signcolumn=yes
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-.> to trigger completion.
-inoremap <silent><expr> <c-.> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-set completeopt-=menu
-set completeopt+=menuone   " show the popup menu even when there is only 1 match
-set completeopt-=longest   " don't insert the longest common text
-set completeopt+=preview   " don't show preview window
-set completeopt+=noinsert  " don't insert any text until user chooses a match
-set completeopt-=noselect  " select first match
-
-" Disable documentation window
-set completeopt-=preview
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" # Editor settings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set scrolloff=3
-set shortmess+=I
-set shortmess+=A
-set shortmess+=a
-
-if has ('syntax')
-    set spellcapcheck=
-endif
-
-set noshowmode
-set hidden
-" set nowrap
-set wrap
-set nojoinspaces
-let g:sneak#s_next = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_frontmatter = 1
-set printfont=:h10
-set printencoding=utf-8
-set printoptions=paper:letter
-" Always draw sign column. Prevent buffer moving when adding/deleting sign.
-set signcolumn=yes
-" Sane splits
-if has('windows')
-    set splitbelow
-endif
-
-if has('vertsplit')
-    set splitright
-endif
-
-" Move around splits
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-" Line breaks
-if has('linebreak')
-    let &showbreak='⤷ '
-endif
-
-if has('linebreak')
-    set breakindent
-    if exists('&breakindentopt')
-        set breakindentopt=shift:2
+    if !empty(glob('~/.vim/tmp/' . s:viminfo))
+      if !filereadable(expand('~/.vim/tmp/' . s:viminfo))
+        echoerr 'warning: ~/.vim/tmp/' . s:viminfo . ' exists but is not readable'
+      endif
     endif
+  endif
 endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" # Keyboard
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " # Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
