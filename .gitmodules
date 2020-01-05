@@ -50,3 +50,6 @@
 [submodule "configfiles/nvim/pack/bundle/opt/vim-abolish"]
 	path = configfiles/nvim/pack/bundle/opt/vim-abolish
 	url = https://github.com/tpope/vim-abolish
+[submodule "configfiles/nvim/pack/bundle/opt/vim-repeat"]
+	path = configfiles/nvim/pack/bundle/opt/vim-repeat
+	url = https://github.com/tpope/vim-repeat
