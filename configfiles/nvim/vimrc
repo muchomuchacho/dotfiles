@@ -49,12 +49,14 @@ if exists('s:viminfo')
     " - h do not save/restore 'hlsearch' setting
     "
     " Our overrides:
-    " - '500 store marks for 500 files
-    " - <500 save 500 lines per register
+    " - '300 store marks for 300 files
+    " - <100 save 100 lines per register
+    " - s300 save 300 lines per register
     " - f1 store file marks
+    " - h do not save 'hlsearch' marks
     " - n: store in ~/.vim/tmp
     "
-    execute 'set ' . s:viminfo . "='200,<50,f1,s10,h,n~/.vim/tmp/" . s:viminfo
+    execute 'set ' . s:viminfo . "='300,<100,f1,s300,h,n~/.vim/tmp/" . s:viminfo
 
     if !empty(glob('~/.vim/tmp/' . s:viminfo))
       if !filereadable(expand('~/.vim/tmp/' . s:viminfo))
@@ -81,8 +83,9 @@ if &loadplugins
         packadd! vim-commentary
         packadd! vim-fugitive
         packadd! vim-surround
+        packadd! vim-mundo
+        packadd! vim-repeat
         packadd! neomake
-        " packadd! vim-mundo
         packadd! scalpel
         " Fuzzy finder
         packadd! fzf.vim
