@@ -10,6 +10,7 @@ alias nunity='open -na Unity'
 alias l='exa -lg'
 alias ll='exa -lag'
 alias lt='exa -T'
+alias ffe='fzf_find_edit'
 
 # misc
 alias edit='docker run -ti --rm -v $(pwd):/tmp docvim'

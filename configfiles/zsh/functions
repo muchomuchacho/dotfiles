@@ -29,12 +29,6 @@ function cd () {
     fi
 }
 
-# cd into last CT log
-function last_ct () {
-    cd /home/"${USER}"/git/wood/functional/clusterdb/ct_logs/ct_run.ctmaster@127.0.0.10.*(/[-1]);
-    cd ./apps.clusterdb.logs/run.*/log_private
-}
-
 # SSH using root by default
 function sshr () {
     ssh root@$1
@@ -129,4 +123,14 @@ function lb() {
         echo "### "${NOW} >> $journalfile
     fi
     nvim $journalfile
+}
+
+fzf_find_edit() {
+    local file=$(
+      fzf --query="$1" --no-multi --select-1 --exit-0 \
+          --preview 'bat --color=always --line-range :500 {}'
+      )
+    if [[ -n $file ]]; then
+        $EDITOR "$file"
+    fi
 }
