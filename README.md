@@ -9,6 +9,6 @@ My dotfiles
     ./install
     cd ~
 
-## Keeping submodules up-to-date and pointing to the tip of the branch
+### Keeping submodules up-to-date and pointing to the tip of the branch
 
     git submodule update --recursive --remote
