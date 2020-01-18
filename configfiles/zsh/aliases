@@ -11,6 +11,7 @@ alias l='exa -lg'
 alias ll='exa -lag'
 alias lt='exa -T'
 alias ffe='fzf_find_edit'
+alias gll='fzf_git_log'
 
 # misc
 alias edit='docker run -ti --rm -v $(pwd):/tmp docvim'
