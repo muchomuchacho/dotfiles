@@ -23,11 +23,11 @@ if exists('&belloff')
   set belloff=all                     " never ring the bell for any reason
 endif
 
-if exists('+colorcolumn')
-    " Highlight up to 255 columns (this is the current Vim max) beyond
-    " textwidth
-    let &l:colorcolumn='+' . join(range(0, 254), ',+')
-endif
+" if exists('+colorcolumn')
+"     " Highlight up to 255 columns (this is the current Vim max) beyond
+"     " textwidth
+"     let &l:colorcolumn='+' . join(range(0, 254), ',+')
+" endif
 
 set cursorline
 
