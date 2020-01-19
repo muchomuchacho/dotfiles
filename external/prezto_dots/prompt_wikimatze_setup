@@ -47,8 +47,27 @@ function prompt_wikimatze_setup {
       'prompt' ' %F{green}(%f$(coalesce "%b" "%p" "%c")${git_info[rprompt]}%s%F{green})%f' \
       'rprompt' '%A%B%S%C%D%U%u'
 
+  # Nested prompts
+  if [ "${SHLVL}" -eq 1 ]; then
+    NP=""
+  else
+    NP=${_prompt_mseri_colors[1]}("${SHLVL}")%f
+  fi
+
+  # User name
+  UN=${_prompt_mseri_colors[3]}%n%f
+
+  # Host name
+  HN=${_prompt_mseri_colors[2]}%m%f
+
+  # Path
+  PA=${_prompt_mseri_colors[5]}%~%f
+
+  # Git info
+  GI='${(e)git_info[prompt]}'
+
   # Define prompts.
-  PROMPT="${_prompt_mseri_colors[3]}%n%f@${_prompt_mseri_colors[2]}%m%f ${_prompt_mseri_colors[5]}%~%f"'${(e)git_info[prompt]}'" » "
+  PROMPT="${UN}@${HN} ${PA}"${GI}" ${NP} » "
   RPROMPT=''
 
 }
