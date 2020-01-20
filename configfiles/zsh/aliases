@@ -5,6 +5,9 @@
 # Unity
 alias nunity='open -na Unity'
 
+# Polybar
+alias tpol='polybar -l info -c ~/.config/polybar/config-top.ini orion'
+
 # Personal
 ## exa -> https://github.com/ogham/exa
 alias l='exa -lg'
