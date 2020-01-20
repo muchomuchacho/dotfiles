@@ -76,11 +76,7 @@ endif
 if &loadplugins
     if has('packages')
         " muchomuchacho
-        packadd! mpc
-        " Aesthetics
-        packadd! vim-airline
-        packadd! vim-airline-themes
-        packadd! vim-devicons
+        " packadd! mpc
         " Functionality
         packadd! vim-commentary
         packadd! vim-fugitive
@@ -100,6 +96,10 @@ if &loadplugins
         packadd! coc.nvim
         " Colorscheme
         packadd! gruvbox
+        " Aesthetics
+        packadd! vim-airline
+        packadd! vim-airline-themes
+        packadd! vim-devicons
     endif
 endif
 

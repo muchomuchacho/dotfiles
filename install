@@ -1,11 +1,26 @@
 #!/usr/bin/env zsh
-############################
+##############################
 # Backup and symlink dotfiles
-############################
+##############################
 
+########## Variables
 HOSTTYPE=$(uname -s)
+topdir="$(git rev-parse --show-toplevel)"
+dir=~/.dotfiles
+olddir=~/.dotfiles_old
+home_files=(vimrc tmux.conf gitignore_global)
+shell_files=(functions exports aliases)
+config_files="nvim"
+datestr=$(date -u "+%Y%m%d-%H%M")
 
-if [ "${SHELL}" != $(which zsh) ]; then
+if [ "${HOSTTYPE}" != "Linux" ]; then
+    home_files=(${home_files} gvimrc-nonlinux)
+else
+    home_files=(${home_files} gvimrc)
+fi
+
+
+if [ -z "${ZSH_VERSION}" ]; then
     echo "This script needs to be run from a zsh shell"
     echo "Setting up ZSH as the default shell..."
     echo "Please open a new iTerm window and re-run this script"
@@ -14,10 +29,16 @@ if [ "${SHELL}" != $(which zsh) ]; then
 fi
 
 if ! command_exists curl && [[ "${HOSTTYPE}" = "Linux" ]]; then
-    sudo apt-get install -y curl
+	echo "Please install curl and run this script again"
 fi
 
+# Install asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+
+##############################
 # Helper functions
+##############################
+
 function command_exists {
     command -v "$@" > /dev/null 2>&1
 }
@@ -30,39 +51,118 @@ function result {
     fi
 }
 
-# function vim_plugins {
-#     # Check if Plug is already installed
-#     if [ ! -d "${HOME}/.local/share/nvim/site/autoload/" ]; then
-#         curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-#     fi
+##############################
+# INSTALL FUNCTIONS
+##############################
 
-#     # Install Plugins
-#     nvim +PlugInstall +PlugUpdate +qall
-#     result
-# }
+function _install_prezto() {
+  echo "Installing prezto"
+  zsh_files=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
 
-########## Variables
-topdir="$(git rev-parse --show-toplevel)"
-dir=~/.dotfiles                    # dotfiles directory
-olddir=~/.dotfiles_old             # old dotfiles backup directory
-# list of files/folders to symlink in homedir
-home_files=(functions exports alias vimrc tmux.conf gitignore_global)
+  if [ ! -d "${HOME}/.zprezto" ]; then
+      cp -a "${dir}/external/prezto" "${HOME}/.zprezto"
+  fi
+  for file in ${zsh_files}; do
+      if [ -e "${HOME}/.${file}" ]; then
+          rm -f "${HOME}/.${file}"
+      fi
+  done
+  result
 
-if [ "${HOSTTYPE}" != "Linux" ]; then
-    home_files=(${home_files} gvimrc-nonlinux)
-else
-    home_files=(${home_files} gvimrc)
-fi
+  prezto_files=(zshrc zpreztorc)
+  prompts=(prompt_wikimatze_setup)
+  setopt EXTENDED_GLOB
+  echo "Creating prezto symlinks..."
+  for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+      [[ $(basename $rcfile) == "zshrc" || $(basename $rcfile) == "zpreztorc" ]] || ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+  done
 
-# list of files/folders to symlink in $HOME/.config/
-config_files="nvim"
+  for file in ${prezto_files}; do
+      echo -n "Creating symlink to $file in home directory."
+      destfile=${file}
+      ln -s "${dir}/external/prezto_dots/dots/${file}" "${HOME}/.${destfile}"
+      result
+  done
+  for prompt in ${prompts}; do
+      cp -a "${dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
+      result
+  done
+}
 
-datestr=$(date -u "+%Y%m%d-%H%M")
+function _install_linters() {
+  missing_linters=0
+  linters=(shellcheck flake8 pep8)
+  for linter in ${linters}; do
+      if ! command_exists "${linter}"; then
+          ((missing_linters++))
+          echo "${linter} not found. Please install"
+      fi
+  done
 
+  if [[ $missing_linters -gt 0 ]]; then
+      printf "You are missing %s linters [\033[0;31mERROR\033[0m]\n" "$missing_linters"
+  else
+      printf "All expected linters were detected. [\033[0;32mOK\033[0m]\n"
+  fi
+  result
+}
 
-########## Create symlinks
+function _git_setup() {
+  echo "Set up some GIT basic config"
 
-# create dotfiles_old in homedir
+  # Set privacy email for this repo (dotfiles)
+  git config user.email 4213495+muchomuchacho@users.noreply.github.com
+  # Git lg alias: https://coderwall.com/p/euwpig/a-better-git-log
+  git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+  # Alias to recursively get submodule status
+  git config --global alias.sb "submodule foreach \"git status\""
+  # Gitignore globals
+  git config --global core.excludesfile "$HOME/.gitignore_global"
+  # Simple git pushing
+  git config --global push.default simple
+  # Set editor
+  git config --global core.editor nvim
+  # Set git d as difftool -> vimdiff
+  git config --global diff.tool vimdiff
+  git config --global difftool.prompt false
+  git config --global alias.d difftool
+  result
+}
+
+function _mac_setup() {
+  if [[ "${HOSTTYPE}" = "Darwin" ]]; then
+      echo
+      echo "Ah, this is a Mac, let's do some Mac setup too!"
+      if ! command_exists brew; then
+          ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      fi
+      if [ ! -f ~/.xvimrc ]; then
+          ln -s ~/.vimrc ~/.xvimrc
+      fi
+      for f in ${dir}/${HOSTTYPE}/Library/Preferences/*; do
+          echo "Copy app preferences into ~/Library folder"
+          cp -n "${f}" "${HOME}/Library/Preferences" && \
+              echo "Copied ${f} into ${HOME}/Library/Preferences/"
+      done
+      defaults write -g KeyRepeat -int 2
+      defaults write -g ApplePressAndHoldEnabled -bool false
+      echo "Installing brew application bundle. It includes fonts, dev apps and other utilities"
+      brew bundle
+      result
+  fi
+}
+
+##############################
+# Execute install functions
+##############################
+
+_install_linters
+_install_prezto
+
+##############################
+# Create symlinks
+##############################
+
 echo "Creating ${olddir}-${datestr} for backup of any existing dotfiles in ~"
 if [ ! -d "${olddir}-${datestr}" ]; then
     mkdir -p "${olddir}-${datestr}"
@@ -87,7 +187,24 @@ for file in ${home_files}; do
     echo -n "Creating symlink to $file in home directory."
     destfile=${file}
     [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
-    ln -s "${dir}/homefiles/${file}" "${HOME}/.${destfile}"
+    ln -s "${dir}/configfiles/${file}" "${HOME}/.${destfile}"
+    result
+done
+
+for file in ${shell_files}; do
+    if [ -d ~/."${file}" ]; then
+        cp -LR ~/."${file}" "${olddir}-${datestr}"/
+        rm -rf ~/."${file}"
+    elif [ -e ~/."${file}" ]; then
+        cp -L ~/."${file}" "${olddir}-${datestr}"/
+        rm -f ~/."${file}"
+    elif file ~/."${file}" | grep "broken symbolic link"; then
+        rm ~/."${file}"
+    fi
+    echo -n "Creating symlink to $file in home directory."
+    destfile=${file}
+    [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
+    ln -s "${dir}/configfiles/zsh/${file}" "${HOME}/.${destfile}"
     result
 done
 
@@ -108,105 +225,8 @@ for file in ${config_files}; do
     result
 done
 
-file "${HOME}/.config/nvim/init.vim" | grep "broken symbolic link" > /dev/null 2>&1 && rm "${HOME}/.config/nvim/init.vim"
-[ ! -f "${HOME}/.config/nvim/init.vim" ] && ln -s "${dir}/configfiles/vimrc" "${HOME}/.config/nvim/init.vim"
-
-
-# local funtions and exports hint
-[[ ! -f ~/.functions ]] || [[ ! -f ~/.exports ]] && echo "Note: Custom zshrc/profile options can be added in ~/.zshrc"
-
-missing_linters=0
-linters=(shellcheck syntaxerl flake8 pep8)
-for linter in ${linters}; do
-    if ! command_exists "${linter}"; then
-        ((missing_linters++))
-        echo "${linter} not found. Please install"
-    fi
-done
-
-
-if [[ $missing_linters -gt 0 ]]; then
-    printf "You are missing %s linters [\033[0;31mERROR\033[0m]\n" "$missing_linters"
-else
-    printf "All expected linters were detected. [\033[0;32mOK\033[0m]\n"
-fi
-
-echo "Running arbitrary application configuration commands"
-
-# Set privacy email for this repo (dotfiles)
-git config user.email 4213495+muchomuchacho@users.noreply.github.com
-# Git lg alias: https://coderwall.com/p/euwpig/a-better-git-log
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-# Alias to recursively get submodule status
-git config --global alias.sb "submodule foreach \"git status\""
-# Gitignore globals
-git config --global core.excludesfile "$HOME/.gitignore_global"
-# Simple git pushing
-git config --global push.default simple
-# Set editor
-git config --global core.editor vim
-# Set git d as difftool -> vimdiff
-git config --global diff.tool vimdiff
-git config --global difftool.prompt false
-git config --global alias.d difftool
-
-if [[ "${HOSTTYPE}" = "Darwin" ]]; then
-    echo
-    echo "Ah, this is a Mac, let's do some Mac setup too!"
-    if ! command_exists brew; then
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    fi
-    if [ ! -f ~/.xvimrc ]; then
-        ln -s ~/.vimrc ~/.xvimrc
-    fi
-    for f in ${dir}/${HOSTTYPE}/Library/Preferences/*; do
-        echo "Copy app preferences into ~/Library folder"
-        cp -n "${f}" "${HOME}/Library/Preferences" && \
-            echo "Copied ${f} into ${HOME}/Library/Preferences/"
-    done
-    defaults write -g KeyRepeat -int 2
-    defaults write -g ApplePressAndHoldEnabled -bool false
-    echo "Installing brew application bundle. It includes fonts, dev apps and other utilities"
-    brew bundle
-    result
-fi
-
-# Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.5.1
-
-# Install prezto
-echo "Installing prezto"
-zsh_files=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
-if [ ! -d "${HOME}/.zprezto" ]; then
-    cp -a "${dir}/external/prezto" "${HOME}/.zprezto"
-fi
-for file in ${zsh_files}; do
-    if [ -e "${HOME}/.${file}" ]; then
-        rm -f "${HOME}/.${file}"
-    fi
-done
-result
-
-prezto_files=(zshrc zpreztorc)
-prompts=(prompt_wikimatze_setup)
-setopt EXTENDED_GLOB
-echo "Creating prezto symlinks..."
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-    [[ $(basename $rcfile) == "zshrc" || $(basename $rcfile) == "zpreztorc" ]] || ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
-
-for file in ${prezto_files}; do
-    echo -n "Creating symlink to $file in home directory."
-    destfile=${file}
-    ln -s "${dir}/external/prezto_dots/dots/${file}" "${HOME}/.${destfile}"
-    result
-done
-for prompt in ${prompts}; do
-    cp -a "${dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
-    result
-done
-
-# echo "Installing Vim plugins" && vim_plugins
+VIM_DIR="${HOME}/.vim"
+[ -d "${VIM}" ] && rm -rf "${VIM_DIR}" && ln -s "${dir}/configfiles/nvim" "${VIM_DIR}"
 
 echo
 echo "Dotfiles bootstrap complete."
