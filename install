@@ -1,16 +1,13 @@
 #!/usr/bin/env zsh
 ##############################
-# Backup and symlink dotfiles
+# DOTFILES
 ##############################
 
-########## Variables
 HOSTTYPE=$(uname -s)
-topdir="$(git rev-parse --show-toplevel)"
-dir=~/.dotfiles
+dir="$(git rev-parse --show-toplevel)"
 olddir=~/.dotfiles_old
-home_files=(vimrc tmux.conf gitignore_global)
-shell_files=(functions exports aliases)
-config_files="nvim"
+home_files=(tmux.conf gitignore_global functions exports aliases zpreztorc zshrc)
+vim_files="nvim"
 datestr=$(date -u "+%Y%m%d-%H%M")
 
 if [ "${HOSTTYPE}" != "Linux" ]; then
@@ -19,6 +16,10 @@ else
     home_files=(${home_files} gvimrc)
 fi
 
+echo "Creating ${olddir}-${datestr} for backup of any existing dotfiles in ~"
+if [ ! -d "${olddir}-${datestr}" ]; then
+    mkdir -p "${olddir}-${datestr}"
+fi
 
 if [ -z "${ZSH_VERSION}" ]; then
     echo "This script needs to be run from a zsh shell"
@@ -27,13 +28,6 @@ if [ -z "${ZSH_VERSION}" ]; then
     chsh -s $(which zsh)
     exit 1
 fi
-
-if ! command_exists curl && [[ "${HOSTTYPE}" = "Linux" ]]; then
-	echo "Please install curl and run this script again"
-fi
-
-# Install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
 ##############################
 # Helper functions
@@ -51,11 +45,26 @@ function result {
     fi
 }
 
+if ! command_exists curl; then
+  echo "Please install curl and run this script again"
+fi
+
+if ! command_exists git; then
+  echo "Please install curl and run this script again"
+fi
+
 ##############################
 # INSTALL FUNCTIONS
 ##############################
 
-function _install_prezto() {
+function install_asdf() {
+  if [ ! -d "~/.asdf" ]; then
+    # Install asdf
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+  fi
+}
+
+function install_prezto() {
   echo "Installing prezto"
   zsh_files=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
 
@@ -69,27 +78,17 @@ function _install_prezto() {
   done
   result
 
-  prezto_files=(zshrc zpreztorc)
-  prompts=(prompt_wikimatze_setup)
   setopt EXTENDED_GLOB
   echo "Creating prezto symlinks..."
   for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
       [[ $(basename $rcfile) == "zshrc" || $(basename $rcfile) == "zpreztorc" ]] || ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
   done
 
-  for file in ${prezto_files}; do
-      echo -n "Creating symlink to $file in home directory."
-      destfile=${file}
-      ln -s "${dir}/external/prezto_dots/dots/${file}" "${HOME}/.${destfile}"
-      result
-  done
-  for prompt in ${prompts}; do
-      cp -a "${dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
-      result
-  done
+  # setup the all the home dotfiles
+  homefiles_setup
 }
 
-function _install_linters() {
+function check_linters() {
   missing_linters=0
   linters=(shellcheck flake8 pep8)
   for linter in ${linters}; do
@@ -107,7 +106,7 @@ function _install_linters() {
   result
 }
 
-function _git_setup() {
+function git_setup() {
   echo "Set up some GIT basic config"
 
   # Set privacy email for this repo (dotfiles)
@@ -129,7 +128,7 @@ function _git_setup() {
   result
 }
 
-function _mac_setup() {
+function mac_setup() {
   if [[ "${HOSTTYPE}" = "Darwin" ]]; then
       echo
       echo "Ah, this is a Mac, let's do some Mac setup too!"
@@ -152,81 +151,76 @@ function _mac_setup() {
   fi
 }
 
+function vim_setup() {
+  [ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config"
+  for file in ${vim_files}; do
+      if [ -d "${HOME}/.config/${file}" ]; then
+          cp -LR "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
+          rm -rf "${HOME}/.config/${file}"
+      elif [ -e "${HOME}/.config/${file}" ]; then
+          cp -L "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
+          rm -f "${HOME}/.config/${file}"
+      elif file "${HOME}/.config/${file}" | grep "broken symbolic link"; then
+          rm "${HOME}/.config/${file}"
+      fi
+      destfile=${file}
+      echo -n "Creating symlink to ${file} in ${HOME}/.config directory."
+      ln -s "${dir}/configfiles/${file}" "${HOME}/.config/${destfile}"
+      result
+  done
+
+  NVIM=("vim" "vimrc")
+  for file in "${NVIM}"; do
+    if [ -e "${file}" ]; then
+      rm -rf "${file}"
+    fi
+    ln -s "${dir}/configfiles/${file}" "${HOME}/.${file}"
+  done
+
+  # clone and initiate submodules
+  git submodule update --init --recursive
+  # update submodules to the tip of the branch
+  git submodule update --recursive --remote
+}
+
+function homefiles_setup() {
+  # move any existing dotfiles in $HOME to dotfiles_old directory, then create symlinks
+  echo "Backing up dotfiles to files from ~ to ${olddir}-${datestr}/"
+  for file in ${home_files}; do
+      if [ -d ~/."${file}" ]; then
+          cp -LR ~/."${file}" "${olddir}-${datestr}"/
+          rm -rf ~/."${file}"
+      elif [ -e ~/."${file}" ]; then
+          cp -L ~/."${file}" "${olddir}-${datestr}"/
+          rm -f ~/."${file}"
+      elif file ~/."${file}" | grep "broken symbolic link"; then
+          rm ~/."${file}"
+      fi
+      echo -n "Creating symlink to $file in home directory."
+      destfile=${file}
+      [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
+      ln -s "${dir}/configfiles/${file}" "${HOME}/.${destfile}"
+      result
+  done
+
+  prompts=(prompt_wikimatze_setup)
+  for prompt in ${prompts}; do
+      cp -a "${dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
+      result
+  done
+}
+
 ##############################
 # Execute install functions
 ##############################
 
-_install_linters
-_install_prezto
-
-##############################
-# Create symlinks
-##############################
-
-echo "Creating ${olddir}-${datestr} for backup of any existing dotfiles in ~"
-if [ ! -d "${olddir}-${datestr}" ]; then
-    mkdir -p "${olddir}-${datestr}"
-fi
-
-# change to the dotfiles directory
-echo "Changing to the ${dir} directory"
-cd ${dir} || exit
-
-# move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks
-echo "Backing up dotfiles to files from ~ to ${olddir}-${datestr}/"
-for file in ${home_files}; do
-    if [ -d ~/."${file}" ]; then
-        cp -LR ~/."${file}" "${olddir}-${datestr}"/
-        rm -rf ~/."${file}"
-    elif [ -e ~/."${file}" ]; then
-        cp -L ~/."${file}" "${olddir}-${datestr}"/
-        rm -f ~/."${file}"
-    elif file ~/."${file}" | grep "broken symbolic link"; then
-        rm ~/."${file}"
-    fi
-    echo -n "Creating symlink to $file in home directory."
-    destfile=${file}
-    [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
-    ln -s "${dir}/configfiles/${file}" "${HOME}/.${destfile}"
-    result
-done
-
-for file in ${shell_files}; do
-    if [ -d ~/."${file}" ]; then
-        cp -LR ~/."${file}" "${olddir}-${datestr}"/
-        rm -rf ~/."${file}"
-    elif [ -e ~/."${file}" ]; then
-        cp -L ~/."${file}" "${olddir}-${datestr}"/
-        rm -f ~/."${file}"
-    elif file ~/."${file}" | grep "broken symbolic link"; then
-        rm ~/."${file}"
-    fi
-    echo -n "Creating symlink to $file in home directory."
-    destfile=${file}
-    [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
-    ln -s "${dir}/configfiles/zsh/${file}" "${HOME}/.${destfile}"
-    result
-done
-
-[ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config" && mkdir -p "${HOME}/.config/nvim"
-for file in ${config_files}; do
-    if [ -d "${HOME}/.config/${file}" ]; then
-        cp -LR "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
-        rm -rf "${HOME}/.config/${file}"
-    elif [ -e "${HOME}/.config/${file}" ]; then
-        cp -L "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
-        rm -f "${HOME}/.config/${file}"
-    elif file "${HOME}/.config/${file}" | grep "broken symbolic link"; then
-        rm "${HOME}/.config/${file}"
-    fi
-    destfile=${file}
-    echo -n "Creating symlink to ${file} in ${HOME}/.config directory."
-    ln -s "${dir}/configfiles/${file}" "${HOME}/.config/${destfile}"
-    result
-done
-
-VIM_DIR="${HOME}/.vim"
-[ -d "${VIM}" ] && rm -rf "${VIM_DIR}" && ln -s "${dir}/configfiles/nvim" "${VIM_DIR}"
+# install_prezto
+# install_asdf
+# vim_setup
+# homefiles_setup
+# git_setup
+# mac_setup
+# check_linters
 
 echo
 echo "Dotfiles bootstrap complete."
