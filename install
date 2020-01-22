@@ -7,7 +7,6 @@ HOSTTYPE=$(uname -s)
 dir="$(git rev-parse --show-toplevel)"
 olddir=~/.dotfiles_old
 home_files=(tmux.conf gitignore_global functions exports aliases zpreztorc zshrc)
-vim_files="nvim"
 datestr=$(date -u "+%Y%m%d-%H%M")
 
 if [ "${HOSTTYPE}" != "Linux" ]; then
@@ -152,35 +151,40 @@ function mac_setup() {
 }
 
 function vim_setup() {
+  setopt shwordsplit
   [ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config"
-  for file in ${vim_files}; do
-      if [ -d "${HOME}/.config/${file}" ]; then
-          cp -LR "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
-          rm -rf "${HOME}/.config/${file}"
-      elif [ -e "${HOME}/.config/${file}" ]; then
-          cp -L "${HOME}/.config/${file}" "${olddir}-${datestr}/.config"
-          rm -f "${HOME}/.config/${file}"
-      elif file "${HOME}/.config/${file}" | grep "broken symbolic link"; then
-          rm "${HOME}/.config/${file}"
-      fi
-      destfile=${file}
-      echo -n "Creating symlink to ${file} in ${HOME}/.config directory."
-      ln -s "${dir}/configfiles/${file}" "${HOME}/.config/${destfile}"
-      result
-  done
-
-  NVIM=("vim" "vimrc")
-  for file in "${NVIM}"; do
-    if [ -e "${file}" ]; then
-      rm -rf "${file}"
-    fi
-    ln -s "${dir}/configfiles/${file}" "${HOME}/.${file}"
-  done
+  function process_files() {
+    files=$2
+    for file in ${files[@]}; do
+        if [ -d "$1${file}" ]; then
+            cp -LR "$1${file}" "${olddir}-${datestr}/.config"
+            echo -n "Backing up and deleting $1${file}\n"
+            rm -rf "$1${file}"
+        elif [ -e "$1${file}" ]; then
+            cp -L "$1${file}" "${olddir}-${datestr}/.config"
+            echo -n "Backing up and deleting $1${file}\n"
+            rm -f "$1${file}"
+        elif file "$1${file}" | grep "broken symbolic link"; then
+            rm "$1${file}"
+        fi
+        destfile=${file}
+        echo "Creating symlink to ${file} in $1 directory.\n"
+        if [ "${file}" = "vim" ]; then
+          file="nvim"
+        fi
+        ln -s "${dir}/configfiles/${file}" "$1${destfile}"
+        result
+    done
+  }
+  process_files "${HOME}/.config/" "nvim"
+  process_files "${HOME}/." "vim vimrc"
 
   # clone and initiate submodules
   git submodule update --init --recursive
   # update submodules to the tip of the branch
   git submodule update --recursive --remote
+
+  unsetopt shwordsplit
 }
 
 function homefiles_setup() {
@@ -216,7 +220,7 @@ function homefiles_setup() {
 
 # install_prezto
 # install_asdf
-# vim_setup
+vim_setup
 # homefiles_setup
 # git_setup
 # mac_setup
