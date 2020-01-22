@@ -154,25 +154,26 @@ function vim_setup() {
   setopt shwordsplit
   [ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config"
   function process_files() {
+    dest_path=$1
     files=$2
     for file in ${files[@]}; do
-        if [ -d "$1${file}" ]; then
-            cp -LR "$1${file}" "${olddir}-${datestr}/.config"
-            echo -n "Backing up and deleting $1${file}\n"
-            rm -rf "$1${file}"
-        elif [ -e "$1${file}" ]; then
-            cp -L "$1${file}" "${olddir}-${datestr}/.config"
-            echo -n "Backing up and deleting $1${file}\n"
-            rm -f "$1${file}"
-        elif file "$1${file}" | grep "broken symbolic link"; then
-            rm "$1${file}"
+        if [ -d "${dest_path}${file}" ]; then
+            cp -LR "${dest_path}${file}" "${olddir}-${datestr}/.config"
+            echo -n "Backing up and deleting ${dest_path}${file}\n"
+            rm -rf "${dest_path}${file}"
+        elif [ -e "${dest_path}${file}" ]; then
+            cp -L "${dest_path}${file}" "${olddir}-${datestr}/.config"
+            echo -n "Backing up and deleting ${dest_path}${file}\n"
+            rm -f "${dest_path}${file}"
+        elif file "${dest_path}${file}" | grep "broken symbolic link"; then
+            rm "${dest_path}${file}"
         fi
         destfile=${file}
-        echo "Creating symlink to ${file} in $1 directory.\n"
+        echo "Creating symlink to ${file} in ${dest_path} directory.\n"
         if [ "${file}" = "vim" ]; then
           file="nvim"
         fi
-        ln -s "${dir}/configfiles/${file}" "$1${destfile}"
+        ln -s "${dir}/configfiles/${file}" "${dest_path}${destfile}"
         result
     done
   }
