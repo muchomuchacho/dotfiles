@@ -1,3 +1,20 @@
+" list of the extensions required
+let g:coc_global_extensions = [
+            \'coc-yank',
+            \'coc-pairs',
+            \'coc-json',
+            \'coc-yaml',
+            \'coc-css',
+            \'coc-html',
+            \'coc-lists',
+            \'coc-python',
+            \'coc-syntax',
+            \'coc-git',
+            \'coc-rls',
+            \'coc-highlight',
+            \'coc-docker',
+            \]
+
 " 'Smart' nevigation
 nmap <silent> E <Plug>(coc-diagnostic-prev)
 nmap <silent> W <Plug>(coc-diagnostic-next)
