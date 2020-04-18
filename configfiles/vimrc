@@ -94,6 +94,7 @@ if &loadplugins
         packadd! vim-markdown
         " Semantic language support
         packadd! coc.nvim
+        packadd! semshi
         " Colorscheme
         packadd! gruvbox
         " Aesthetics
