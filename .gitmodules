@@ -53,3 +53,6 @@
 [submodule "configfiles/nvim/pack/bundle/opt/vim-repeat"]
 	path = configfiles/nvim/pack/bundle/opt/vim-repeat
 	url = https://github.com/tpope/vim-repeat
+[submodule "configfiles/nvim/pack/bundle/opt/semshi"]
+	path = configfiles/nvim/pack/bundle/opt/semshi
+	url = https://github.com/numirias/semshi.git
