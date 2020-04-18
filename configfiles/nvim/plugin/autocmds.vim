@@ -12,6 +12,9 @@ if has("autocmd")
             " Enable spellcheck for plaintext files
             autocmd FileType plaintext setlocal spell spelllang=en_gb
 
+            " Get correct comment highlighting for json
+            autocmd FileType json syntax match Comment +\/\/.\+$+
+
             " " Help filetype detection
             " autocmd BufRead *.plot set filetype=gnuplot
             " autocmd BufRead *.md set filetype=markdown
