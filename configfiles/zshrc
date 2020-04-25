@@ -16,7 +16,6 @@ fi
 
 # asdf
 source $HOME/.asdf/asdf.sh
-source $HOME/.asdf/completions/asdf.bash
 
 # Load shell functions, exports and other dotfiles
 for file in ~/.{path,functions,extra,exports,aliases}; do
