@@ -1,8 +1,5 @@
 #!/bin/env zsh
 
-# Replace <user> with home folder username
-USER="<user>"
-
 # Personal functions
 ## Make functions exportable
 function exportf () {
