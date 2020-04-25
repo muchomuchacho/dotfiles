@@ -20,6 +20,10 @@ nnoremap <Leader>p :echo expand('%')<CR>
 " Quickly open a markdown buffer for scribble
 map <leader>x :vs ~/Seafile/logbook/logbook.md<cr>
 
+" coc-todolist
+nnoremap <leader>tt :CocList todolist<cr>
+nnoremap <silent> <leader>te :Logbook<cr>
+
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
 " ,c will copy entire buffer into clipboard

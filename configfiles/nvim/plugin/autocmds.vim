@@ -17,7 +17,7 @@ if has("autocmd")
 
             " " Help filetype detection
             " autocmd BufRead *.plot set filetype=gnuplot
-            " autocmd BufRead *.md set filetype=markdown
+            autocmd BufRead,BufNewFile *.md set filetype=markdown
             " autocmd BufRead *.lds set filetype=ld
             " autocmd BufRead *.tex set filetype=tex
             " autocmd BufRead *.trm set filetype=c

@@ -81,3 +81,17 @@ function! muchomuchacho#commands#open_on_github(...) abort range
     call muchomuchacho#functions#echoerr('No filename')
   endif
 endfunction
+
+function! muchomuchacho#commands#OpenTodo() abort
+  if bufexists('logbook.md')
+    let lbwin = bufwinnr('logbook.md')
+    if lbwin == -1
+      execute "sbuffer " . bufnr('logbook.md')
+    else
+      execute lbwin . 'wincmd w'
+      return
+    endif
+  else
+    execute "new logbook.md"
+  endif
+endfunction

@@ -20,3 +20,4 @@ command! -bang -nargs=* Rtags
   \   expand('<cword>'),
   \   <bang>0)
 
+command! Logbook call muchomuchacho#commands#OpenTodo()
