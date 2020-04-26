@@ -82,7 +82,7 @@ function! muchomuchacho#commands#open_on_github(...) abort range
   endif
 endfunction
 
-function! muchomuchacho#commands#OpenTodo() abort
+function! muchomuchacho#commands#OpenTodo2() abort
   if bufexists('logbook.md')
     let lbwin = bufwinnr('logbook.md')
     if lbwin == -1
@@ -93,5 +93,18 @@ function! muchomuchacho#commands#OpenTodo() abort
     endif
   else
     execute "new logbook.md"
+  endif
+endfunction
+
+function! muchomuchacho#commands#OpenTodo() abort
+  let name = 'logbook.md'
+  if filereadable(l:name)
+      execute "pedit " . name
+  else
+    execute "e " . name
+  endif
+  execute 'wincmd j'
+  if &previewwindow
+    execute 'setlocal norelativenumber | setlocal nonumber'
   endif
 endfunction
