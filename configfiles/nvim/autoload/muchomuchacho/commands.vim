@@ -97,14 +97,14 @@ function! muchomuchacho#commands#OpenTodo2() abort
 endfunction
 
 function! muchomuchacho#commands#OpenTodo() abort
-  let name = 'logbook.md'
-  if filereadable(l:name)
-      execute "pedit " . name
-  else
-    execute "e " . name
+  let name = 'TODO.md'
+  if !filereadable(l:name)
+    let l:file=fnamemodify(l:name, ':p')
   endif
+  execute "pedit " . name
   execute 'wincmd j'
   if &previewwindow
-    execute 'setlocal norelativenumber | setlocal nonumber'
+    setlocal norelativenumber
+    setlocal nonumber
   endif
 endfunction
