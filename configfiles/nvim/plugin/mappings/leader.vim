@@ -18,11 +18,11 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <Leader>p :echo expand('%')<CR>
 
 " Quickly open a markdown buffer for scribble
-map <leader>x :vs ~/Seafile/logbook/logbook.md<cr>
+map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 
 " coc-todolist
-nnoremap <leader>tt :CocList todolist<cr>
-nnoremap <silent> <leader>te :Logbook<cr>
+" nnoremap <leader>tt :CocList todolist<cr>
+nnoremap <silent> <leader>ww :Logbook<cr>
 
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
