@@ -22,7 +22,10 @@ map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 
 " coc-todolist
 " nnoremap <leader>tt :CocList todolist<cr>
-nnoremap <silent> <leader>ww :Logbook<cr>
+
+" TODO plugin
+nnoremap <silent> <leader>ww :TodoBrowser<cr>
+nnoremap <silent> <leader>x :TodoToggle<CR>
 
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
