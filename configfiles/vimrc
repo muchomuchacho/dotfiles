@@ -2,7 +2,7 @@ if v:progname == 'vi'
   set noloadplugins
 endif
 
-let mapleader = "\<Space>"
+let mapleader = ","
 let maplocalleader="\\"
 
 set nocompatible            " Disable compatibility to old-time vi
@@ -85,7 +85,8 @@ if &loadplugins
         packadd! vim-repeat
         packadd! neomake
         packadd! scalpel
-        packadd! vim-checkbox
+        packadd! vim-todo
+        " packadd! vim-checkbox
         " Fuzzy finder
         packadd! fzf.vim
         packadd! vim-rooter
