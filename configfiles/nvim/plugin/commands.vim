@@ -19,5 +19,3 @@ command! -bang -nargs=* Rtags
   \ call fzf#vim#tags(
   \   expand('<cword>'),
   \   <bang>0)
-
-command! Logbook call muchomuchacho#commands#OpenTodo()
