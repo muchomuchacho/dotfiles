@@ -56,6 +56,3 @@
 [submodule "configfiles/nvim/pack/bundle/opt/semshi"]
 	path = configfiles/nvim/pack/bundle/opt/semshi
 	url = https://github.com/numirias/semshi.git
-[submodule "configfiles/nvim/pack/bundle/opt/vim-checkbox"]
-	path = configfiles/nvim/pack/bundle/opt/vim-checkbox
-	url = https://github.com/jkramer/vim-checkbox.git
