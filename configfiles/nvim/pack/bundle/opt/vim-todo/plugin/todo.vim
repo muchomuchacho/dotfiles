@@ -9,7 +9,7 @@ endif
 
 function! s:MakeBox(line) abort
   if matchstr(a:line, '\[.\]') == ""
-    let mod_line = substitute(a:line, '\<', '' . '[' . ' ' . ']' . ' ', '')
+    let mod_line = substitute(a:line, '\<', '' . '[' . 'x' . ']' . ' ', '')
     return mod_line
   else
     return a:line
@@ -40,6 +40,7 @@ function! OpenTodo() abort
   if &previewwindow
     setlocal norelativenumber
     setlocal nonumber
+    setlocal spell
   endif
 endfunction
 
