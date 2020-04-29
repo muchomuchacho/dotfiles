@@ -49,9 +49,9 @@ function prompt_wikimatze_setup {
 
   # Nested prompts
   if [ "${SHLVL}" -eq 1 ]; then
-    NP=""
+    NP=
   else
-    NP=${_prompt_mseri_colors[1]}("${SHLVL}")%f
+    NP=${_prompt_mseri_colors[1]}("${SHLVL}")
   fi
 
   # User name
