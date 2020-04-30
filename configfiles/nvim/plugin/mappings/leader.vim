@@ -25,7 +25,7 @@ map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 
 " TODO plugin
 nnoremap <silent> <leader>ww :TodoBrowser<cr>
-nnoremap <silent> <leader>x :TodoToggle<CR>
+nnoremap <silent> <leader>m :TodoToggle<CR>
 
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
