@@ -33,13 +33,12 @@ command! TodoToggle call todo#ToggleComplete()
 function! OpenTodo() abort
   let name = 'TODO.md'
   if !filereadable(l:name)
-    let l:file=fnamemodify(l:name, ':p')
+    let l:file = fnamemodify(l:name, ':p')
   endif
   execute "pedit " . name
   execute 'wincmd j'
   if &previewwindow
-    setlocal norelativenumber
-    setlocal nonumber
+    setlocal norelativenumber nonumber nobuflisted noswapfile
   endif
 endfunction
 
