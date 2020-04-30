@@ -17,15 +17,20 @@ function! s:MakeBox(line) abort
 endfunction
 
 function! todo#ToggleComplete() abort
+  if !&previewwindow
+    echo 'This is not a TODO window!'
+    return
+  endif
   let states = copy(g:todo_states)
+  let td = {'t': 'TODO', 'd': 'DONE'}
   let l:line = s:MakeBox(getline('.'))
   let view = winsaveview()
   let l:char = matchstr(l:line, '\[\zs.\ze]')
   let l:char = states[(index(states, l:char) + 1) % len(states)]
   if l:char == g:todo_states[-1]
-    let l:line = substitute(l:line, 'TODO', 'DONE', '')
+    let l:line = substitute(l:line, td.t, td.d, '')
   else
-    let l:line = substitute(l:line, 'DONE', 'TODO', '')
+    let l:line = substitute(l:line, td.d, td.t, '')
   endif
   keeppatterns call setline(line('.'), substitute(l:line, '\[\zs.\ze]', l:char, ''))
   call winrestview(view)
