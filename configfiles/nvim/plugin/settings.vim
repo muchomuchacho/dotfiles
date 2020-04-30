@@ -143,9 +143,9 @@ if has('syntax')
   set synmaxcol=200                   " don't bother syntax highlighting long lines
 endif
 
-" if has('termguicolors')
-"   set termguicolors                   " use guifg/guibg instead of ctermfg/ctermbg in terminal
-" endif
+if has('termguicolors')
+  set termguicolors                   " use guifg/guibg instead of ctermfg/ctermbg in terminal
+endif
 
 set textwidth=80                      " automatically hard wrap at 80 columns
 
