@@ -49,9 +49,9 @@ function prompt_wikimatze_setup {
 
   # Nested prompts
   if [ "${SHLVL}" -eq 1 ]; then
-    NP=
+    NP=""
   else
-    NP=${_prompt_mseri_colors[1]}("${SHLVL}")
+    NP="${_prompt_mseri_colors[1]}<${SHLVL}> "
   fi
 
   # User name
@@ -67,7 +67,7 @@ function prompt_wikimatze_setup {
   GI='${(e)git_info[prompt]}'
 
   # Define prompts.
-  PROMPT="${UN}@${HN} ${PA}"${GI}" ${NP} » "
+  PROMPT="${UN}@${HN} ${PA}"${GI}" ${NP}%f» "
   RPROMPT=''
 
 }
