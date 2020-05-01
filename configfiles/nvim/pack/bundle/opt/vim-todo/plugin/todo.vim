@@ -9,6 +9,7 @@ endif
 
 function! s:MakeBox(line) abort
   if matchstr(a:line, '\[.\]') == ""
+    s/^\s\+//e
     let mod_line = substitute(a:line, '\<', ' ' . '[' . 'x' . ']' . ' ' . 'TODO: ', '')
     return mod_line
   else
@@ -65,7 +66,7 @@ function! OpenTodo() abort
   "   let l:file = fnamemodify(l:f_name, ':p')
   " endif
   execute "pedit " . l:f_name
-  execute 'wincmd j'
+  execute 'wincmd P'
   let l:first_text = getline(2)
   if matchstr(l:first_text, '#', 0) == ""
     call append(0, ["", "# TODO for " . l:proj_dir, ""])
