@@ -4,6 +4,7 @@ setlocal shiftwidth=4
 setlocal expandtab
 setlocal autoindent
 setlocal formatoptions=croql
+setlocal nospell
 " set foldmethod=indent
 let python_highlight_all=1
 
