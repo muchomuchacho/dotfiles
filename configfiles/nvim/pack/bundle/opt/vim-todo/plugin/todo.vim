@@ -7,16 +7,6 @@ if !exists('g:todo_states')
   let g:todo_states = [' ', 'x']
 endif
 
-function! s:MakeBox(line) abort
-  if matchstr(a:line, '\[.\]') == ""
-    s/^\s\+//e
-    let mod_line = substitute(a:line, '\<', ' ' . '[' . 'x' . ']' . ' ' . 'TODO: ', '')
-    return mod_line
-  else
-    return a:line
-  endif
-endfunction
-
 function! s:FindGitRoot(file) abort
   let l:path = fnamemodify(a:file, ':p')
   while 1
@@ -29,6 +19,19 @@ function! s:FindGitRoot(file) abort
       return ''
     endif
   endwhile
+endfunction
+
+function! s:MakeBox(line) abort
+  let l:clean_l = substitute(a:line, '\v^\s*', '', '')
+  if match(l:clean_l, '\a') == 0
+    let mod_line = substitute(l:clean_l, '\<', ' ' . '[' . 'x' . ']' . ' ' . 'TODO: ', '')
+    return mod_line
+  elseif matchstr(l:clean_l, "\^*") == '*'
+    let mod_line = substitute(l:clean_l, '*\s*', '   ' . '[' . 'x' . ']' . ' ' . 'TODO: ', '')
+    return mod_line
+  else
+    return a:line
+  endif
 endfunction
 
 function! todo#ToggleComplete() abort
