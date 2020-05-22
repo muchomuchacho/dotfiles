@@ -37,6 +37,7 @@ nnoremap <silent> <leader>m :TodoToggle<CR>
 " - <LocalLeader>dd: show diff view (mnemonic: [d]iff)
 " - <LocalLeader>dh: choose hunk from left (mnemonic: [h] = left)
 " - <LocalLeader>dl: choose hunk from right (mnemonic: [l] = right)
+nnoremap <silent> <LocalLeader>ds :Git<CR>
 nnoremap <silent> <LocalLeader>dd :Gvdiff<CR>
 nnoremap <silent> <LocalLeader>dh :diffget //2<CR>
 nnoremap <silent> <LocalLeader>dl :diffget //3<CR>

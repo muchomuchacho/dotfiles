@@ -40,7 +40,7 @@ nnoremap <silent> <C-g> :Rgw<Cr>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<Cr>
 nnoremap <silent> <leader>t :GGrep<Cr>
-nnoremap <silent> <Leader>d :GFiles?<Cr>
+nnoremap <silent> <Leader>d :GFiles<Cr>
 " nnoremap <silent> <Leader>t :Tags<Cr>
 nnoremap <silent> <Leader>cc :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
