@@ -24,7 +24,7 @@ map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 " nnoremap <leader>tt :CocList todolist<cr>
 
 " TODO plugin
-nnoremap <silent> <leader>ww :TodoBrowser<cr>
+nnoremap <silent> <leader>tt :TodoBrowser<cr>
 nnoremap <silent> <leader>m :TodoToggle<CR>
 
 " Neat X clipboard integration
