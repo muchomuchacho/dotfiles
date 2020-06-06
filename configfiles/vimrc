@@ -86,7 +86,8 @@ if &loadplugins
         packadd! neomake
         packadd! scalpel
         packadd! vim-todo
-        " packadd! vim-checkbox
+        packadd! vim-dirvish
+        packadd! vimwiki
         " Fuzzy finder
         packadd! fzf.vim
         packadd! vim-rooter
