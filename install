@@ -4,31 +4,15 @@
 ##############################
 
 HOSTTYPE=$(uname -s)
-dir="$(git rev-parse --show-toplevel)"
-bindir=~/bin/
-olddir=~/.dotfiles_old
-home_files=(tmux.conf gitignore_global functions exports aliases zpreztorc zshrc)
+base_dir="$(git rev-parse --show-toplevel)"
+bin_dir=${HOME}/bin/
+home_config=${HOME}/.config/
+alacritty_dir=${home_config}alacritty/
+olddir=${HOME}/.dotfiles_old
+home_files="tmux.conf gitignore_global functions exports aliases zpreztorc zshrc"
 datestr=$(date -u "+%Y%m%d-%H%M")
-
-if [ "${HOSTTYPE}" != "Linux" ]; then
-    home_files=(${home_files} gvimrc-nonlinux)
-else
-    home_files=(${home_files} gvimrc)
-fi
-
-echo "Create ${bindir} if it does not exist"
-[ ! -d "${bindir}" ] && mkdir -p "${bindir}"
-
-echo "Creating ${olddir}-${datestr} for backup of any existing dotfiles in ~"
-[ ! -d "${olddir}-${datestr}" ] && mkdir -p "${olddir}-${datestr}"
-
-if [ -z "${ZSH_VERSION}" ]; then
-    echo "This script needs to be run from a zsh shell"
-    echo "Setting up ZSH as the default shell..."
-    echo "Please open a new iTerm window and re-run this script"
-    chsh -s $(which zsh)
-    exit 1
-fi
+bak_dir=${olddir}-${datestr}
+mk_dirs=("${bin_dir}" "${home_config}" "${alacritty_dir}" "${bak_dir}")
 
 ##############################
 # Helper functions
@@ -51,7 +35,40 @@ if ! command_exists curl; then
 fi
 
 if ! command_exists git; then
-  echo "Please install curl and run this script again"
+  echo "Please install git and run this script again"
+fi
+
+function mk_conf_dir() {
+  for new_dir in ${mk_dirs[@]}; do
+    echo "Creating ${new_dir} if necessary."
+    [ ! -d "${new_dir}" ] && mkdir -p "${new_dir}"
+  done
+  result
+}
+
+##############################
+
+if [ "${HOSTTYPE}" != "Linux" ]; then
+    home_files=(${home_files} gvimrc-nonlinux)
+else
+    home_files=(${home_files} gvimrc)
+fi
+
+echo "Checking for existence of directory structure."
+mk_conf_dir
+
+# echo "Create ${home_config} if it does not exist"
+# mk_dir "${home_config}"
+
+# echo "Creating ${olddir}-${datestr} to backup any existing dotfiles in ~"
+# mk_dir "${olddir}-${datestr}"
+
+if [ -z "${ZSH_VERSION}" ]; then
+    echo "This script needs to be run from a zsh shell"
+    echo "Setting up ZSH as the default shell..."
+    echo "Please open a new iTerm window and re-run this script"
+    chsh -s $(which zsh)
+    exit 1
 fi
 
 ##############################
@@ -70,7 +87,7 @@ function install_prezto() {
   zsh_files=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
 
   if [ ! -d "${HOME}/.zprezto" ]; then
-      cp -a "${dir}/external/prezto" "${HOME}/.zprezto"
+      cp -a "${base_dir}/external/prezto" "${HOME}/.zprezto"
   fi
   for file in ${zsh_files}; do
       if [ -e "${HOME}/.${file}" ]; then
@@ -139,7 +156,7 @@ function mac_setup() {
       if [ ! -f ~/.xvimrc ]; then
           ln -s ~/.vimrc ~/.xvimrc
       fi
-      for f in ${dir}/${HOSTTYPE}/Library/Preferences/*; do
+      for f in ${base_dir}/${HOSTTYPE}/Library/Preferences/*; do
           echo "Copy app preferences into ~/Library folder"
           cp -n "${f}" "${HOME}/Library/Preferences" && \
               echo "Copied ${f} into ${HOME}/Library/Preferences/"
@@ -152,37 +169,40 @@ function mac_setup() {
   fi
 }
 
+function process_files() {
+  source_path=$1
+  dest_path=$2
+  files=$3
+  echo "Backing up dotfiles to files from ~ to ${bak_dir}"
+  echo "SOURCE PATH: ${source_path}"
+  echo "FIRST ARGUMENT: $1"
+  for file in ${files[@]}; do
+      if [ -d "${dest_path}${file}" ]; then
+          cp -LR "${dest_path}${file}" "${bak_dir}/.config"
+          echo -n "Backing up and deleting ${dest_path}${file}\n"
+          rm -rf "${dest_path}${file}"
+      elif [ -e "${dest_path}${file}" ]; then
+          cp -L "${dest_path}${file}" "${bak_dir}/.config"
+          echo -n "Backing up and deleting ${dest_path}${file}\n"
+          rm -f "${dest_path}${file}"
+      elif file "${dest_path}${file}" | grep "broken symbolic link"; then
+          rm "${dest_path}${file}"
+      fi
+      destfile=${file}
+      echo "Creating symlink to ${file} in ${dest_path} directory.\n"
+      if [ "${file}" = "vim" ]; then
+        file="nvim"
+      fi
+      ln -s "${source_path}${file}" "${dest_path}${destfile}"
+      result
+  done
+}
+
 function vim_setup() {
   setopt shwordsplit
-  [ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config"
-  function process_files() {
-    source_path=$1
-    dest_path=$2
-    files=$3
-    for file in ${files[@]}; do
-        if [ -d "${dest_path}${file}" ]; then
-            cp -LR "${dest_path}${file}" "${olddir}-${datestr}/.config"
-            echo -n "Backing up and deleting ${dest_path}${file}\n"
-            rm -rf "${dest_path}${file}"
-        elif [ -e "${dest_path}${file}" ]; then
-            cp -L "${dest_path}${file}" "${olddir}-${datestr}/.config"
-            echo -n "Backing up and deleting ${dest_path}${file}\n"
-            rm -f "${dest_path}${file}"
-        elif file "${dest_path}${file}" | grep "broken symbolic link"; then
-            rm "${dest_path}${file}"
-        fi
-        destfile=${file}
-        echo "Creating symlink to ${file} in ${dest_path} directory.\n"
-        if [ "${file}" = "vim" ]; then
-          file="nvim"
-        fi
-        ln -s "${source_path}${file}" "${dest_path}${destfile}"
-        result
-    done
-  }
-  process_files "${dir}/configfiles/" "${HOME}/.config/" "nvim"
-  process_files "${dir}/configfiles/" "${HOME}/." "vim vimrc"
-  process_files "${dir}/external/bin/" "${bindir}" "generate-vimwiki-diary-template"
+  process_files "${base_dir}/configfiles/" "${home_config}" "nvim"
+  process_files "${base_dir}/configfiles/" "${HOME}/." "vim vimrc"
+  process_files "${base_dir}/external/bin/" "${bin_dir}" "generate-vimwiki-diary-template"
 
   # clone and initiate submodules
   git submodule update --init --recursive
@@ -193,28 +213,14 @@ function vim_setup() {
 }
 
 function homefiles_setup() {
-  # move any existing dotfiles in $HOME to dotfiles_old directory, then create symlinks
-  echo "Backing up dotfiles to files from ~ to ${olddir}-${datestr}/"
-  for file in ${home_files}; do
-      if [ -d ~/."${file}" ]; then
-          cp -LR ~/."${file}" "${olddir}-${datestr}"/
-          rm -rf ~/."${file}"
-      elif [ -e ~/."${file}" ]; then
-          cp -L ~/."${file}" "${olddir}-${datestr}"/
-          rm -f ~/."${file}"
-      elif file ~/."${file}" | grep "broken symbolic link"; then
-          rm ~/."${file}"
-      fi
-      echo -n "Creating symlink to $file in home directory."
-      destfile=${file}
-      [ "${file}" = "gvimrc-nonlinux" ] && destfile="gvimrc"
-      ln -s "${dir}/configfiles/${file}" "${HOME}/.${destfile}"
-      result
-  done
+  setopt shwordsplit
+  process_files "${base_dir}/configfiles/" "${HOME}/." "${home_files}"
+  process_files "${base_dir}/configfiles/" "${alacritty_dir}" "alacritty.yml"
+  unsetopt shwordsplit
 
   prompts=(prompt_wikimatze_setup)
   for prompt in ${prompts}; do
-      cp -a "${dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
+      cp -a "${base_dir}/external/prezto_dots/${prompt}" "${HOME}/.zprezto/modules/prompt/functions/${prompt}"
       result
   done
 }
