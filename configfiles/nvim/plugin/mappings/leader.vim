@@ -28,7 +28,8 @@ nnoremap <silent> <leader>tt :TodoBrowser<cr>
 nnoremap <silent> <leader>m :TodoToggle<CR>
 
 nnoremap <leader>ss :VimwikiSearchTags<space>
-nnoremap <leader>l :VimwikiBacklinks<CR>
+nnoremap <silent><leader>l :VimwikiBacklinks<CR>
+nnoremap <silent><leader>gh :VimwikiAll2HTML<CR>
 
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
