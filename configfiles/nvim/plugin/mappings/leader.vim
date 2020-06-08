@@ -18,7 +18,7 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <Leader>p :echo expand('%')<CR>
 
 " Quickly open a markdown buffer for scribble
-map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
+" map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 
 " coc-todolist
 " nnoremap <leader>tt :CocList todolist<cr>
@@ -26,6 +26,9 @@ map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 " TODO plugin
 nnoremap <silent> <leader>tt :TodoBrowser<cr>
 nnoremap <silent> <leader>m :TodoToggle<CR>
+
+nnoremap <leader>ss :VimwikiSearchTags<space>
+nnoremap <leader>l :VimwikiBacklinks<CR>
 
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
