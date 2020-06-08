@@ -5,6 +5,7 @@
 
 HOSTTYPE=$(uname -s)
 dir="$(git rev-parse --show-toplevel)"
+bindir=~/bin/
 olddir=~/.dotfiles_old
 home_files=(tmux.conf gitignore_global functions exports aliases zpreztorc zshrc)
 datestr=$(date -u "+%Y%m%d-%H%M")
@@ -15,10 +16,11 @@ else
     home_files=(${home_files} gvimrc)
 fi
 
+echo "Create ${bindir} if it does not exist"
+[ ! -d "${bindir}" ] && mkdir -p "${bindir}"
+
 echo "Creating ${olddir}-${datestr} for backup of any existing dotfiles in ~"
-if [ ! -d "${olddir}-${datestr}" ]; then
-    mkdir -p "${olddir}-${datestr}"
-fi
+[ ! -d "${olddir}-${datestr}" ] && mkdir -p "${olddir}-${datestr}"
 
 if [ -z "${ZSH_VERSION}" ]; then
     echo "This script needs to be run from a zsh shell"
@@ -154,8 +156,9 @@ function vim_setup() {
   setopt shwordsplit
   [ ! -d "${HOME}/.config" ] && mkdir -p "${HOME}/.config"
   function process_files() {
-    dest_path=$1
-    files=$2
+    source_path=$1
+    dest_path=$2
+    files=$3
     for file in ${files[@]}; do
         if [ -d "${dest_path}${file}" ]; then
             cp -LR "${dest_path}${file}" "${olddir}-${datestr}/.config"
@@ -173,12 +176,13 @@ function vim_setup() {
         if [ "${file}" = "vim" ]; then
           file="nvim"
         fi
-        ln -s "${dir}/configfiles/${file}" "${dest_path}${destfile}"
+        ln -s "${source_path}${file}" "${dest_path}${destfile}"
         result
     done
   }
-  process_files "${HOME}/.config/" "nvim"
-  process_files "${HOME}/." "vim vimrc"
+  process_files "${dir}/configfiles/" "${HOME}/.config/" "nvim"
+  process_files "${dir}/configfiles/" "${HOME}/." "vim vimrc"
+  process_files "${dir}/external/bin/" "${bindir}" "generate-vimwiki-diary-template"
 
   # clone and initiate submodules
   git submodule update --init --recursive

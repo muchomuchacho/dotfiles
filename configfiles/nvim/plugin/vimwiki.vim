@@ -20,5 +20,5 @@ let g:vimwiki_hl_headers = 1
 
 augroup my_notes
   autocmd!
-  autocmd BufNewFile ~/Seafile/logbook/Notes/diary/*.md :silent 0r !~/.config/nvim/bin/generate-vimwiki-diary-template '%'
+  autocmd BufNewFile *Notes/diary/*.md :silent 0r !generate-vimwiki-diary-template '%'
 augroup END
