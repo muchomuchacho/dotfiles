@@ -31,6 +31,17 @@ nnoremap <leader>ss :VimwikiSearchTags<space>
 nnoremap <silent><leader>l :VimwikiBacklinks<CR>
 nnoremap <silent><leader>gh :VimwikiAll2HTML<CR>
 
+" FZF
+nnoremap <silent> <leader>b :Buffers<Cr>
+nnoremap <silent> <leader>t :GGrep<Cr>
+nnoremap <silent> <Leader>d :GFiles<Cr>
+nnoremap <silent> <Leader>wt :Rtags<CR>
+" nnoremap <silent> <Leader>t :Tags<Cr>
+nnoremap <silent> <Leader>cc :Commits<CR>
+nnoremap <silent> <Leader>bc :BCommits<CR>
+nnoremap <localleader> w :call muchomuchacho#functions#GrepForWord("Rgw")<CR>
+nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
 " Neat X clipboard integration
 " ,p will paste clipboard into buffer
 " ,c will copy entire buffer into clipboard

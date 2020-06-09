@@ -32,22 +32,16 @@ nnoremap j gj
 nnoremap k gk
 
 " Left and right can switch buffers
-nnoremap <left> :bp<CR>
-nnoremap <right> :bn<CR>
+nnoremap <silent><left> :bp<CR>
+nnoremap <silent><right> :bn<CR>
 
-"" fzf
+" FZF
 nnoremap <silent> <C-g> :Rgw<Cr>
 nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <leader>b :Buffers<Cr>
-nnoremap <silent> <leader>t :GGrep<Cr>
-nnoremap <silent> <Leader>d :GFiles<Cr>
-" nnoremap <silent> <Leader>t :Tags<Cr>
-nnoremap <silent> <Leader>cc :Commits<CR>
-nnoremap <silent> <Leader>bc :BCommits<CR>
-nnoremap <localleader> w :call muchomuchacho#functions#GrepForWord("Rgw")<CR>
 nnoremap <silent> T :call muchomuchacho#functions#GrepForWord("GGrep")<CR>
-nnoremap <leader> ] :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-" nnoremap <silent> <Leader>g :Rtags<CR>
+"" fuzzy find wiki entries
+nnoremap <C-w>p :Files ~/Seafile/logbook/Notes/<CR>
+" nnoremap <C-w>g :Rgw ~/Seafile/logbook/Notes/<Cr>
 
 " No arrow keys --- force yourself to use the home row
 inoremap <up> <nop>
