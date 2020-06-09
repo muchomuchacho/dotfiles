@@ -41,6 +41,7 @@ nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> T :call muchomuchacho#functions#GrepForWord("GGrep")<CR>
 "" fuzzy find wiki entries
 nnoremap <C-w>p :Files ~/Seafile/logbook/Notes/<CR>
+nnoremap <C-w>r :<C-u>Rwiki<space>
 " nnoremap <C-w>g :Rgw ~/Seafile/logbook/Notes/<Cr>
 
 " No arrow keys --- force yourself to use the home row

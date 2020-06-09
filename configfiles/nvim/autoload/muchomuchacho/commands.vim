@@ -82,18 +82,10 @@ function! muchomuchacho#commands#open_on_github(...) abort range
   endif
 endfunction
 
-function! muchomuchacho#commands#OpenTodo2() abort
-  if bufexists('logbook.md')
-    let lbwin = bufwinnr('logbook.md')
-    if lbwin == -1
-      execute "sbuffer " . bufnr('logbook.md')
-    else
-      execute lbwin . 'wincmd w'
-      return
-    endif
-  else
-    execute "new logbook.md"
-  endif
+function! muchomuchacho#commands#RipgrepFzf(query, s_path) abort
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s'
+  let initial_command = printf(command_fmt, a:query.' '.a:s_path)
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview())
 endfunction
 
 function! muchomuchacho#commands#OpenTodo() abort
