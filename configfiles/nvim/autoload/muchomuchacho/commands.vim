@@ -83,9 +83,9 @@ function! muchomuchacho#commands#open_on_github(...) abort range
 endfunction
 
 function! muchomuchacho#commands#RipgrepFzf(query, s_path) abort
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s'
-  let initial_command = printf(command_fmt, a:query.' '.a:s_path)
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview())
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --case-sensitive -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query).' '.a:s_path)
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview('right:50%', 'ctrl-p'), 0)
 endfunction
 
 function! muchomuchacho#commands#OpenTodo() abort
