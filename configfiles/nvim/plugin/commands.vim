@@ -24,14 +24,3 @@ command! -bang -nargs=* Rgf
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.<q-args>, 1,
   \   fzf#vim#with_preview(), <bang>0)
-
-let g:n_search_paths = ['~/Seafile/logbook/Notes', '~/Seafile/logbook/MD_wiki']
-let s:search_paths = map(copy(g:n_search_paths), 'expand(v:val)')
-let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
-
-command! -bang Bck
-    \ call muchomuchacho#commands#RipgrepFzf('\[\['.expand('%:t:r').'\]\]', s:search_path_str)
-
-command! -bang -nargs=1 Rwiki
-    \ call muchomuchacho#commands#RipgrepFzf(<q-args>, s:search_path_str)
-

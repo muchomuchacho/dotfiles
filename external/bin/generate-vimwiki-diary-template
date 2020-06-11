@@ -5,9 +5,9 @@ import datetime
 
 from pathlib import Path
 
-template = """= {date} =
+template = """# {date}
 
-=== Checklist ===
+### Checklist
 
 * [ ] Drink water
 * [ ] Take a vitamins
@@ -16,12 +16,13 @@ template = """= {date} =
 * [ ] Exercise
 * [ ] Meditate
 
-=== Todo ===
+### Todo
+
 * Pay a visit to [[../Read a Paper]]
 * Check the [[../index#Inbox|Inbox]]
 * Write down some [[../index#Inbox|Ideas]]
 
-=== Notes ==="""
+### Notes"""
 
 # Get the date from datetime or from the filename
 date = (datetime.date.today() if len(sys.argv) < 2
