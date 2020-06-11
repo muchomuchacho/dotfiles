@@ -15,6 +15,7 @@ template = """# {date}
 * [ ] Stretch
 * [ ] Exercise
 * [ ] Meditate
+* [ ] Read
 
 ### Todo
 
@@ -22,7 +23,9 @@ template = """# {date}
 * Check the [[../index#Inbox|Inbox]]
 * Write down some [[../index#Inbox|Ideas]]
 
-### Notes"""
+### Notes
+
+### Journal"""
 
 # Get the date from datetime or from the filename
 date = (datetime.date.today() if len(sys.argv) < 2
