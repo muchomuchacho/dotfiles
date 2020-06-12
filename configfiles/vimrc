@@ -2,7 +2,7 @@ if v:progname == 'vi'
   set noloadplugins
 endif
 
-let mapleader = ","
+let mapleader = " "
 let maplocalleader="\\"
 
 set nocompatible            " Disable compatibility to old-time vi
