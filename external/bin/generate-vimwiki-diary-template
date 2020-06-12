@@ -7,7 +7,7 @@ from pathlib import Path
 
 template = """# {date}
 
-### Checklist
+## Checklist
 
 * [ ] Drink water
 * [ ] Take a vitamins
@@ -17,15 +17,15 @@ template = """# {date}
 * [ ] Meditate
 * [ ] Read
 
-### Todo
+## Todo
 
-* Pay a visit to [[../Read a Paper]]
-* Check the [[../index#Inbox|Inbox]]
-* Write down some [[../index#Inbox|Ideas]]
+* Pay a visit to [Read a Paper](../Read a Paper)
+* Check the [Inbox](../index#Inbox)
+* Write down some [Ideas](../index#Ideas)
 
-### Notes
+## Notes
 
-### Journal"""
+## Journal"""
 
 # Get the date from datetime or from the filename
 date = (datetime.date.today() if len(sys.argv) < 2
