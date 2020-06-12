@@ -47,7 +47,7 @@ augroup my_notes
 augroup END
 
 command! -bang Bck
-    \ call muchomuchacho#commands#RipgrepFzf('\['.expand('%:t:r').'\]\('.expand('%:t:r').'\)', s:search_path_str)
+    \ call muchomuchacho#commands#RipgrepFzf('\[.*?\]\('.expand('%:t:r').'.*?\)', s:search_path_str)
 
 command! -bang -nargs=1 Rwiki
     \ call muchomuchacho#commands#RipgrepFzf(<q-args>, s:search_path_str)
