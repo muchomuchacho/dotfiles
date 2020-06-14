@@ -1,6 +1,6 @@
 " VimWiki
 
-let g:n_search_paths = ['~/Seafile/logbook/Notes', '~/git/md_notes']
+let g:n_search_paths = ['~/Seafile/logbook/Notes', '~/git/md_wiki']
 let s:search_paths = map(copy(g:n_search_paths), 'expand(v:val)')
 let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
 
@@ -22,7 +22,6 @@ let my_notes.ext = '.md'
 " Markdown wiki for testing
 let md_wiki = {}
 let md_wiki.path = g:n_search_paths[1]
-let md_wiki.path_html = '~/Seafile/logbook/MD_html'
 let md_wiki.auto_tags = 1
 let md_wiki.auto_generate_tags = 1
 let md_wiki.auto_generate_links = 1
