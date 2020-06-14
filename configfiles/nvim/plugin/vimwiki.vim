@@ -1,10 +1,7 @@
 " VimWiki
-
 let g:n_search_paths = ['~/Seafile/logbook/Notes', '~/git/md_wiki']
-let s:search_paths = map(copy(g:n_search_paths), 'expand(v:val)')
-let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
 
-" set path to a directory inside Seafile
+" Vimwiki wiki
 let my_notes = {}
 let my_notes.path = g:n_search_paths[0]
 let my_notes.path_html = '~/Seafile/logbook/Notes_html/'
@@ -19,7 +16,7 @@ let my_notes.automatic_nested_syntaxes = 1
 let my_notes.auto_tags = 1
 let my_notes.ext = '.md'
 
-" Markdown wiki for testing
+" Markdown wiki (main)
 let md_wiki = {}
 let md_wiki.path = g:n_search_paths[1]
 let md_wiki.auto_tags = 1
@@ -35,7 +32,6 @@ let md_wiki.ext = '.md'
 let g:vimwiki_list = [md_wiki, my_notes]
 " make sure vimwiki doesn't own all .md files
 let g:vimwiki_global_ext = 0
-" let g:vimwiki_ext = '.md'
 " use colors in header highlighting
 let g:vimwiki_hl_headers = 1
 
