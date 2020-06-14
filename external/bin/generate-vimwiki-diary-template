@@ -20,8 +20,8 @@ template = """# {date}
 ## Todo
 
 * Pay a visit to [Read a Paper](../Read a Paper)
-* Check the [Inbox](../index#Inbox)
-* Write down some [Ideas](../index#Ideas)
+* Check the [Inbox](../home#Inbox)
+* Write down some [Ideas](../home#Ideas)
 
 ## Notes
 
