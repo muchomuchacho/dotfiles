@@ -20,12 +20,10 @@ template = """# {date}
 ## Todo
 
 * Pay a visit to [Read a Paper](../Read a Paper)
-* Check the [Inbox](../home#Inbox)
+* Check the [Inbox](../home#Contents#Inbox#New)
 * Write down some [Ideas](../home#Ideas)
 
-## Notes
-
-## Journal"""
+## Notes"""
 
 # Get the date from datetime or from the filename
 date = (datetime.date.today() if len(sys.argv) < 2
