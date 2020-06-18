@@ -19,9 +19,9 @@ template = """# {date}
 
 ## Todo
 
-* Pay a visit to [Read a Paper](../Read a Paper)
-* Check the [Inbox](../home#Contents#Inbox#New)
-* Write down some [Ideas](../home#Ideas)
+* Pay a visit to [Read a Paper](/Read a Paper)
+* Check the [Inbox](/home#Contents#Inbox#New)
+* Write down some [Ideas](/home#Ideas)
 
 ## Notes"""
 
