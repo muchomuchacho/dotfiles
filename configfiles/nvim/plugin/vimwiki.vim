@@ -29,7 +29,7 @@ let md_wiki.syntax = 'markdown'
 let md_wiki.index = 'home'
 let md_wiki.ext = '.md'
 
-let g:vimwiki_list = [md_wiki, my_notes]
+let g:vimwiki_list = [md_wiki]
 " make sure vimwiki doesn't own all .md files
 let g:vimwiki_global_ext = 0
 " use colors in header highlighting
