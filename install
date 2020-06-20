@@ -203,6 +203,7 @@ function vim_setup() {
   process_files "${base_dir}/configfiles/" "${home_config}" "nvim"
   process_files "${base_dir}/configfiles/" "${HOME}/." "vim vimrc"
   process_files "${base_dir}/external/bin/" "${bin_dir}" "generate-vimwiki-diary-template"
+  process_files "${base_dir}/external/bin/" "${bin_dir}" "vwtags.py"
 
   # clone and initiate submodules
   git submodule update --init --recursive
