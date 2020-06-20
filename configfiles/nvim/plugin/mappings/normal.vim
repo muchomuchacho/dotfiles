@@ -40,7 +40,7 @@ nnoremap <silent> <C-g> :Rgw<Cr>
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> T :call muchomuchacho#functions#GrepForWord("GGrep")<CR>
 "" fuzzy find wiki entries
-nnoremap <C-w>p :Files ~/Seafile/logbook/Notes/<CR>
+nnoremap <C-w>p :Files ~/git/md_wiki<CR>
 nnoremap <C-w>r :GrepWiki<space>
 nnoremap <silent><C-w>b :Bck<CR>
 " nnoremap <C-w>g :Rgw ~/Seafile/logbook/Notes/<Cr>

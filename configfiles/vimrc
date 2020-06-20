@@ -88,6 +88,7 @@ if &loadplugins
         packadd! vim-todo
         packadd! vim-dirvish
         packadd! vimwiki
+        packadd! tagbar
         " Fuzzy finder
         packadd! fzf.vim
         packadd! vim-rooter
