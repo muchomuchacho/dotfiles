@@ -76,7 +76,7 @@ for lnum, line in enumerate(file_content):
     scope = "&&&".join(
             [state[i] for i in range(0, cur_lvl-1) if state[i] != ""])
     if scope:
-        scope = "\theader:" + scope
+        scope = "\theader: " + scope
 
     print('{0}\t{1}\t/{2}/;"\t{3}\tline:{4}{5}'.format(
         cur_tag, filename, cur_searchterm, cur_kind, str(lnum+1), scope))
