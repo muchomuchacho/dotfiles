@@ -7,23 +7,27 @@ from pathlib import Path
 
 template = """# {date}
 
-## Checklist
+## Morning Journal
+* What should be the highlight of the day
+* What's on your mind
 
-* [ ] Drink water
-* [ ] Take a vitamins
-* [ ] Eat breakfast
+## Todo
+
 * [ ] Stretch
 * [ ] Exercise
 * [ ] Meditate
 * [ ] Read
 
-## Todo
+* [Currently doing](/home#Active)
 
-* Pay a visit to [Read a Paper](/Read a Paper)
-* Check the [Inbox](/home#Contents#Inbox#New)
-* Write down some [Ideas](/home#Ideas)
+## Input
 
-## Notes"""
+## Output
+
+## Evening Reflection
+* What could you have done better?
+* What's something remarkable that happened today?
+* What did you lean today?"""
 
 # Get the date from datetime or from the filename
 date = (datetime.date.today() if len(sys.argv) < 2
