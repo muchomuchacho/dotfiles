@@ -21,8 +21,13 @@ template = """# {date}
 * [Currently doing](/home#Active)
 
 ## Input
+* Reading:
+* Listening:
+* Watching:
 
 ## Output
+* Working on:
+* Writing about:
 
 ## Evening Reflection
 * What could you have done better?
