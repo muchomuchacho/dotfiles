@@ -29,8 +29,9 @@ endfunction
 
 " Add link to Listening after line
 function! AddLinkToListening() abort
-  if search('\[Listening\]')
-    return
+  let mark_line =  search('\[Listening\]')
+  if mark_line
+    call deletebufline(bufnr("%"), mark_line)
   endif
   let w = search('### Active')
   exec w . "pu='* [Listening](/diary/'.strftime('%F').'#Listening)'"
