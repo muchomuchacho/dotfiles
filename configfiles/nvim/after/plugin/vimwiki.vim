@@ -3,6 +3,7 @@ augroup md_wiki
   autocmd BufNewFile *md_wiki/diary/*.md :silent 0r !generate-vimwiki-diary-template '%'
   autocmd! BufRead *md_wiki/home.md :Git pull
   autocmd BufWritePost *md_wiki/* call RunGitCommands()
+  autocmd! BufRead *md_wiki/home.md call AddLinkToListening()
 augroup END
 
 " Add modified files, create a comma separated string with them and use them
@@ -24,4 +25,13 @@ function! RunGitCommands() abort
     exe 'Git push'
     echom 'Changes commited and pushed for ' . files_str
   endif
+endfunction
+
+" Add link to Listening after line
+function! AddLinkToListening() abort
+  if search('\[Listening\]')
+    return
+  endif
+  let w = search('### Active')
+  exec w . "pu='* [Listening](/diary/'.strftime('%F').'#Listening)'"
 endfunction
