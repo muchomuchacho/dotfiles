@@ -35,6 +35,9 @@ nnoremap k gk
 nnoremap <silent><left> :bp<CR>
 nnoremap <silent><right> :bn<CR>
 
+" Insert time
+nnoremap <C-t>t "=strftime("%c")<CR>P
+
 " FZF
 nnoremap <silent> <C-g> :Rgw<Cr>
 nnoremap <silent> <C-p> :Files<CR>
@@ -44,6 +47,8 @@ nnoremap <C-w>p :Files ~/git/md_wiki<CR>
 nnoremap <C-w>r :GrepWiki<space>
 nnoremap <silent><C-w>b :Bck<CR>
 " nnoremap <C-w>g :Rgw ~/Seafile/logbook/Notes/<Cr>
+
+nnoremap <F8> :TagbarToggle<CR>
 
 " No arrow keys --- force yourself to use the home row
 inoremap <up> <nop>
