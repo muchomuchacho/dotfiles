@@ -4,6 +4,6 @@ let g:tagbar_type_vimwiki = {
           \ , 'sro':'&&&'
           \ , 'kind2scope':{'h':'header'}
           \ , 'sort':0
-          \ , 'ctagsbin':'/path/to/vwtags.py'
-          \ , 'ctagsargs': 'default'
+          \ , 'ctagsbin':'~/bin/vwtags.py'
+          \ , 'ctagsargs': 'markdown'
           \ }
