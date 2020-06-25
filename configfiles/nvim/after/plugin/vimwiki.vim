@@ -1,9 +1,9 @@
 augroup md_wiki
   autocmd!
   autocmd BufNewFile *md_wiki/diary/*.md :silent 0r !generate-vimwiki-diary-template '%'
-  autocmd! BufRead *md_wiki/home.md :Git pull
+  autocmd BufRead *md_wiki/home.md call AddLinkToListening()
+  autocmd BufRead *md_wiki/home.md :Git pull
   autocmd BufWritePost *md_wiki/* call RunGitCommands()
-  autocmd! BufRead *md_wiki/home.md call AddLinkToListening()
 augroup END
 
 " Add modified files, create a comma separated string with them and use them
