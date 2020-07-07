@@ -27,6 +27,8 @@ nnoremap <Leader>p :echo expand('%')<CR>
 nnoremap <silent> <leader>tt :TodoBrowser<cr>
 nnoremap <silent> <leader>m :TodoToggle<CR>
 
+nnoremap <leader>re :GetRecipe<CR>
+
 " Vimwiki
 nnoremap <leader>ss :VimwikiSearchTags<space>
 nnoremap <silent><leader>l :VimwikiBacklinks<CR>

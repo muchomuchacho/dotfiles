@@ -6,3 +6,5 @@ command! -bang Bck
 
 command! -bang -nargs=1 GrepWiki
     \ call muchomuchacho#commands#RipgrepFzf(<q-args>, s:search_path_str)
+
+command! -range GetRecipe execute "!downrec " . "'" . substitute(getline('.'), '* ', '', '') . "'"
