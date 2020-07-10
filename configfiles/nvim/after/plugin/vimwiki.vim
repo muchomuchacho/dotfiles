@@ -35,4 +35,5 @@ function! AddLinkToListening() abort
   endif
   let w = search('### Active')
   exec w . "pu='* [Listening](/diary/'.strftime('%F').'#Listening)'"
+  silent update
 endfunction
