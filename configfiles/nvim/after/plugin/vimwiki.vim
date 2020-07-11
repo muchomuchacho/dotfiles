@@ -15,7 +15,7 @@ function! RunGitCommands() abort
     return
   elseif choice == 1
     exe 'Git add .'
-    let staged_files = join(split(execute("Git status -s"), 'M  '), '')
+    let staged_files = join(split(execute("Git status -s"), '[MA]  '), '')
     let files_str = join(split(staged_files, '\n'), ',')
     if empty(files_str) == 1
       echo "No modified files to commit."
