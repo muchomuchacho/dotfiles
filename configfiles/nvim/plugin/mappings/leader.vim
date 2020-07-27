@@ -23,6 +23,13 @@ nnoremap <Leader>p :echo expand('%')<CR>
 " coc-todolist
 " nnoremap <leader>tt :CocList todolist<cr>
 
+" Flutter
+nnoremap <leader>fa :FlutterRun<cr>
+nnoremap <leader>fq :FlutterQuit<cr>
+nnoremap <leader>fr :FlutterHotReload<cr>
+nnoremap <leader>fR :FlutterHotRestart<cr>
+nnoremap <leader>fD :FlutterVisualDebug<cr>
+
 " TODO plugin
 nnoremap <silent> <leader>tt :TodoBrowser<cr>
 nnoremap <silent> <leader>m :TodoToggle<CR>

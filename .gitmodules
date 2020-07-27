@@ -65,3 +65,9 @@
 [submodule "configfiles/nvim/pack/bundle/opt/tagbar"]
 	path = configfiles/nvim/pack/bundle/opt/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+[submodule "configfiles/nvim/pack/bundle/opt/dart-vim-plugin"]
+	path = configfiles/nvim/pack/bundle/opt/dart-vim-plugin
+	url = https://github.com/dart-lang/dart-vim-plugin.git
+[submodule "configfiles/nvim/pack/bundle/opt/vim-flutter"]
+	path = configfiles/nvim/pack/bundle/opt/vim-flutter
+	url = https://github.com/thosakwe/vim-flutter.git
