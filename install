@@ -230,10 +230,10 @@ function homefiles_setup() {
 # Execute install functions (Uncomment the function calls that you wish to install)
 ###################################################################################
 
-# install_prezto
+install_prezto
 # install_asdf
 vim_setup
-# homefiles_setup
+homefiles_setup
 # git_setup
 # mac_setup
 # check_linters
