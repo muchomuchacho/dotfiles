@@ -76,14 +76,19 @@ fi
 ##############################
 
 function install_asdf() {
+  echo "Installing asdf"
   if [ ! -d "~/.asdf" ]; then
     # Install asdf
     git clone https://github.com/asdf-vm/asdf.git ~/.asdf
   fi
+  result
 }
 
 function install_prezto() {
   echo "Installing prezto"
+  if [ ! -d "~/.asdf" ]; then
+    git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+  fi
   zsh_files=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
 
   if [ ! -d "${HOME}/.zprezto" ]; then
@@ -94,13 +99,13 @@ function install_prezto() {
           rm -f "${HOME}/.${file}"
       fi
   done
-  result
 
   setopt EXTENDED_GLOB
   echo "Creating prezto symlinks..."
   for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
       [[ $(basename $rcfile) == "zshrc" || $(basename $rcfile) == "zpreztorc" ]] || ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
   done
+  result
 
   # setup the all the home dotfiles
   homefiles_setup
