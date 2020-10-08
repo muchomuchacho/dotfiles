@@ -232,7 +232,7 @@ function homefiles_setup() {
 
 # install_prezto
 # install_asdf
-# vim_setup
+vim_setup
 # homefiles_setup
 # git_setup
 # mac_setup
