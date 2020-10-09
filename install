@@ -75,6 +75,14 @@ fi
 # INSTALL FUNCTIONS
 ##############################
 
+function install_mvenv() {
+  echo "Installing mvenv"
+  if [ ! -d "~/.mvenv" ]; then
+    git clone https://github.com/rafapi/mvenv.git ~/.mvenv
+  fi
+  result
+}
+  
 function install_asdf() {
   echo "Installing asdf"
   if [ ! -d "~/.asdf" ]; then
@@ -236,7 +244,8 @@ function homefiles_setup() {
 ###################################################################################
 
 install_prezto
-# install_asdf
+install_asdf
+install_mvenv
 vim_setup
 # homefiles_setup
 # git_setup
