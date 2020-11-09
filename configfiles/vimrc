@@ -91,6 +91,7 @@ if &loadplugins
         packadd! tagbar
         packadd! dart-vim-plugin
         packadd! vim-flutter
+        packadd! vimspector
         " Fuzzy finder
         packadd! fzf.vim
         packadd! vim-rooter
