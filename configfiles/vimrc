@@ -19,8 +19,9 @@ source ~/.fzf/plugin/fzf.vim
 cnoremap %s/ %sm/
 
 """ Python VirtualEnv
-if filereadable('/home/rafa/.virtualenvs/nvim/bin/python')
-  let g:python3_host_prog = expand('/home/rafa/.virtualenvs/nvim/bin/python')
+let py_path = expand("$HOME") . "/.virtualenvs/nvim/bin/python"
+if filereadable(py_path)
+  let g:python3_host_prog = py_path
 endif
 
 let g:fzf_commits_log_options = '--graph --color=always
