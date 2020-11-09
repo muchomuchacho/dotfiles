@@ -11,9 +11,6 @@ nnoremap <silent> g* g*zz
 nnoremap ? ?\v
 nnoremap / /\v
 
-" Executing python scripts
-nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
-
 " Clear search highlighting
 nnoremap <silent> <C-c> :let @/=""<CR><C-l>
 

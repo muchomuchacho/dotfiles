@@ -71,3 +71,6 @@
 [submodule "configfiles/nvim/pack/bundle/opt/vim-flutter"]
 	path = configfiles/nvim/pack/bundle/opt/vim-flutter
 	url = https://github.com/thosakwe/vim-flutter.git
+[submodule "configfiles/nvim/pack/bundle/opt/vimspector"]
+	path = configfiles/nvim/pack/bundle/opt/vimspector
+	url = https://github.com/puremourning/vimspector

@@ -17,11 +17,28 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 " Show the path of the current file
 nnoremap <Leader>p :echo expand('%')<CR>
 
+" Executing python scripts
+nnoremap <leader>r :exec '!python' shellescape(@%, 1)<cr>
+
 " Quickly open a markdown buffer for scribble
 " map <leader>l :vs ~/Seafile/logbook/logbook.md<cr>
 
 " coc-todolist
 " nnoremap <leader>tt :CocList todolist<cr>
+
+"" Debugger
+nnoremap <leader>dd :call vimspector#Launch()<CR>
+nnoremap <leader>de :call vimspector#Reset()<CR>
+
+" nnoremap <leader>acb :call vimspector#ClearLineBreakpoint()<CR>
+
+" nnoremap <leader>al <Plug>VimspectorStepInto
+" nnoremap <leader>aj <Plug>VimspectorStepOver
+" nnoremap <leader>ak <Plug>VimspectorStepOut
+" nnoremap <leader>de <Plug>VimspectorRestart
+
+" nnoremap <leader>ar <Plug>VimspectorRunToCursor
+" nnoremap <leader>ab <Plug>VimspectorToggleBreakpoint
 
 " Flutter
 nnoremap <leader>fa :FlutterRun<cr>
