@@ -8,11 +8,12 @@ base_dir="$(git rev-parse --show-toplevel)"
 bin_dir=${HOME}/bin/
 home_config=${HOME}/.config/
 alacritty_dir=${home_config}alacritty/
+vimspector_dir=${home_config}vimspector-config/
 olddir=${HOME}/.dotfiles_old
 home_files="tmux.conf gitignore_global functions exports aliases zpreztorc zshrc"
 datestr=$(date -u "+%Y%m%d-%H%M")
 bak_dir=${olddir}-${datestr}
-mk_dirs=("${bin_dir}" "${home_config}" "${alacritty_dir}" "${bak_dir}")
+mk_dirs=("${bin_dir}" "${home_config}" "${alacritty_dir}" "${bak_dir}" "${vimspector_dir}")
 
 ##############################
 # Helper functions
@@ -82,7 +83,7 @@ function install_mvenv() {
   fi
   result
 }
-  
+
 function install_asdf() {
   echo "Installing asdf"
   if [ ! -d "~/.asdf" ]; then
@@ -243,9 +244,9 @@ function homefiles_setup() {
 # Execute install functions (Uncomment the function calls that you wish to install)
 ###################################################################################
 
-install_prezto
-install_asdf
-install_mvenv
+# install_prezto
+# install_asdf
+# install_mvenv
 vim_setup
 # homefiles_setup
 # git_setup
