@@ -1,0 +1,31 @@
+{
+  "configurations": {
+    "<name>: Launch": {
+      "adapter": "debugpy",
+      "variables": [
+        {
+          "python": {
+            "shell": "/bin/bash -c 'if [ -z \"${dollar}VIRTUAL_ENV\" ]; then echo $$(which python); else echo \"${dollar}VIRTUAL_ENV/bin/python\"; fi'"
+          }
+        }],
+      "configuration": {
+        "name": "Python: Current File",
+        "type": "python",
+        "stopOnEntry": true,
+        "request": "launch",
+        "cwd": "${workspaceRoot}",
+        "python": "${python}",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "justMyCode": false
+      },
+      "breakpoints": {
+        "exception": {
+          "raised": "N",
+          "uncaught": "",
+          "userUnhandled": ""
+        }
+      }
+    }
+  }
+}
