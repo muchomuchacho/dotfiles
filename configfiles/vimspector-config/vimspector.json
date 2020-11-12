@@ -1,6 +1,6 @@
 {
   "configurations": {
-    "<name>: Launch": {
+    "Run from entry point": {
       "adapter": "debugpy",
       "variables": [
         {
@@ -16,6 +16,44 @@
         "cwd": "${workspaceRoot}",
         "python": "${python}",
         "program": "${file}",
+        "console": "integratedTerminal",
+        "justMyCode": false
+      },
+      "breakpoints": {
+        "exception": {
+          "raised": "N",
+          "uncaught": "",
+          "userUnhandled": ""
+        }
+      }
+    },
+    "Hal RLlib": {
+      "adapter": "debugpy",
+      "variables": [
+        {
+          "python": {
+            "shell": "/bin/bash -c 'if [ -z \"${dollar}VIRTUAL_ENV\" ]; then echo $$(which python); else echo \"${dollar}VIRTUAL_ENV/bin/python\"; fi'"
+          }
+        }],
+      "configuration": {
+        "name": "hal rllib",
+        "type": "python",
+        "stopOnEntry": true,
+        "request": "launch",
+        "program": "${cwd}/hal/hal/hal",
+        "python": "${python}",
+        "env": {
+            "LOG_STDOUT_LEVEL": "DEBUG",
+            "CUDA_VISIBLE_DEVICES": "0",
+            "HAL_TARGET": "${cwd}/sarsa"
+        },
+        "args": [
+            "infra=native",
+            "algo=rllib_sac_marl",
+            "env=pitmine",
+            "exp=rllib",
+            "algo.ray.init_args.local_mode=true"
+        ],
         "console": "integratedTerminal",
         "justMyCode": false
       },
