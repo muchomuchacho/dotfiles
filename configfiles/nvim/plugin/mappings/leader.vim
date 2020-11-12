@@ -27,8 +27,12 @@ nnoremap <leader>r :exec '!python' shellescape(@%, 1)<cr>
 " nnoremap <leader>tt :CocList todolist<cr>
 
 "" Debugger
-nnoremap <leader>dd :call vimspector#Launch()<CR>
-nnoremap <leader>de :call vimspector#Reset()<CR>
+nnoremap <silent><leader>dd :call vimspector#Launch()<CR>
+nnoremap <silent><leader>de :call vimspector#Reset()<CR>
+nnoremap <silent><leader><F1> :<c-u>call vimspector#Evaluate(
+                  \ input( 'Evaluate expression: ' ))<CR>
+nnoremap <silent><leader><F2> :<c-u>call vimspector#AddWatch(
+                  \ input( 'Watch expression: ' ))<CR>
 
 " nnoremap <leader>acb :call vimspector#ClearLineBreakpoint()<CR>
 
