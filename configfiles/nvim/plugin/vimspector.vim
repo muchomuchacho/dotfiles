@@ -8,9 +8,7 @@ endif
 
 scriptencoding utf-8
 
-let g:vimspector_code_minwidth = 90
-let g:vimspector_terminal_maxwidth = 75
-let g:vimspector_terminal_minwidth = 20
+let g:vimspector_terminal_maxwidth = 85
 let g:vimspector_bottombar_height = 15
 
 " function! s:SetUpUI() abort
