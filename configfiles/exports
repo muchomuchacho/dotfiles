@@ -1,0 +1,54 @@
+# Allow bash autocompletion
+autoload bashcompinit
+bashcompinit
+
+# Make vim the default editor.
+
+if which nvim &> /dev/null; then
+    export VISUAL=$(which nvim)
+elif [ -x "$HOME/bin/vim" ]; then
+    export EDITOR=$HOME/bin/vim
+else
+    export EDITOR=vim
+fi
+
+export EDITOR="${VISUAL}"
+
+# Force global editor for GIT
+export GIT_EDITOR="${VISUAL}"
+
+# mvenv
+export WORKON_HOME=$HOME/.virtualenvs
+source $HOME/.mvenv/mvenv.sh
+
+# local executables dirextory
+export PATH=$PATH:$HOME/bin
+
+# # zlib stuff
+# ## Required by `asdf` and `pyenv`
+# export LDFLAGS="${LDFLAGS} -L/usr/local/opt/zlib/lib"
+# export CPPFLAGS="${CPPFLAGS} -I/usr/local/opt/zlib/include"
+
+# # For pkg-config to find zlib you may need to set:
+# export PKG_CONFIG_PATH="${PKG_CONFIG_PATH} /usr/local/opt/zlib/lib/pkgconfig"
+
+# # Go
+# export GOPATH=$HOME/golib
+# export PATH=$PATH:$GOPATH/bin
+# export GOPATH=$GOPATH:$HOME/code/go
+
+# Flutter
+export PATH=$PATH:$HOME/git/flutter/bin
+
+# # iTerm SHELL integration
+# export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
+
+# # LibreSSL
+# export PATH="/usr/local/opt/libressl/bin:$PATH"
+
+# export LDFLAGS="-L/usr/local/opt/libressl/lib"
+# export CPPFLAGS="-I/usr/local/opt/libressl/include"
+
+# export PKG_CONFIG_PATH="/usr/local/opt/libressl/lib/pkgconfig"
+
+export KUBECONFIG=/home/rafa/code/kubeconfig
