@@ -14,8 +14,6 @@ let g:coc_global_extensions = [
             \'coc-highlight',
             \'coc-sh',
             \'coc-docker',
-            \'coc-vimlsp',
-            \'coc-terminal',
             \]
 
 " 'Smart' nevigation

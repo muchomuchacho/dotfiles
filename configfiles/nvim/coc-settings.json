@@ -19,6 +19,10 @@
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.jediEnabled": false,
+<<<<<<< HEAD
+=======
+  "python.linting.enabled": true,
+>>>>>>> parent of b196a07... Add black as default formatter and vml pluggin
   "git.addedSign.hlGroup": "GitGutterAdd",
   "git.changedSign.hlGroup": "GitGutterChange",
   "git.removedSign.hlGroup": "GitGutterDelete",
