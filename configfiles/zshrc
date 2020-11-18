@@ -72,3 +72,6 @@ if [ "$(uname)" = "Darwin" ]; then
     dry 0.0166666666667 > /dev/null
   fi
 fi
+
+# # Scaleway CLI autocomplete initialization.
+# eval "$(scw autocomplete script shell=zsh)"
