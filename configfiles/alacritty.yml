@@ -110,8 +110,8 @@ font:
     #   - (macOS) Menlo
     #   - (Linux) monospace
     #   - (Windows) Consolas
-    #family: monospace
-    family: Hack Nerd Font
+    # family: monospace
+    family: UbuntuMono
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -122,7 +122,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Hack Nerd Font
+    family: UbuntuMono
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: Hack Nerd Font
+    family: UbuntuMono
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -145,13 +145,13 @@ font:
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
     #family: monospace
-    family: Hack Nerd Font
+    family: UbuntuMono
 
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
 
   # Point size
-  size: 11.0
+  size: 10
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -165,7 +165,6 @@ font:
   #glyph_offset:
   #  x: 0
   #  y: 0
-
   # Thin stroke font rendering (macOS only)
   #
   # Thin strokes are suitable for retina displays, but for non-retina screens
@@ -395,7 +394,7 @@ selection:
 #   - (Linux) user login shell
 #   - (Windows) powershell
 shell:
-  program: /bin/zsh
+  program: /usr/bin/zsh
   args:
     - --login
 
@@ -608,7 +607,8 @@ key_bindings:
   #- { key: Add,      mods: Control,       action: IncreaseFontSize }
   #- { key: Subtract, mods: Control,       action: DecreaseFontSize }
   #- { key: Minus,    mods: Control,       action: DecreaseFontSize }
-  #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
+   - { key: Return,   mods: Alt,           action: ToggleFullscreen }
+   - { key: N,        mods: Control,       action: SpawnNewInstance }
 
   # (macOS only)
   #- { key: Key0,   mods: Command,         action: ResetFontSize    }
@@ -622,9 +622,9 @@ key_bindings:
   #- { key: H,      mods: Command,         action: Hide             }
   #- { key: Q,      mods: Command,         action: Quit             }
   #- { key: W,      mods: Command,         action: Quit             }
-  - { key: F,      mods: Command|Control, action: ToggleFullscreen }
-  - { key: N,      mods: Command,         action: SpawnNewInstance }
-  - { key: Key3,   mods: Alt,             chars: "#"               }
+   - { key: F,      mods: Command,         action: ToggleFullscreen }
+   - { key: N,      mods: Command,         action: SpawnNewInstance }
+   - { key: Key3,   mods: Alt,             chars: "#"               }
 
   #- { key: Paste,                    action: Paste                            }
   #- { key: Copy,                     action: Copy                             }
