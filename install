@@ -10,7 +10,7 @@ home_config=${HOME}/.config/
 alacritty_dir=${home_config}alacritty/
 vimspector_dir=${home_config}vimspector-config/
 olddir=${HOME}/.dotfiles_old
-home_files="tmux.conf gitignore_global functions exports aliases zpreztorc zshrc"
+home_files="tmux.conf gitignore_global functions exports exports_priv aliases zpreztorc zshrc"
 datestr=$(date -u "+%Y%m%d-%H%M")
 bak_dir=${olddir}-${datestr}
 mk_dirs=("${bin_dir}" "${home_config}" "${alacritty_dir}" "${bak_dir}" "${vimspector_dir}")
@@ -191,6 +191,7 @@ function process_files() {
   echo "SOURCE PATH: ${source_path}"
   echo "FIRST ARGUMENT: $1"
   for file in ${files[@]}; do
+      [[ ${file} == "exports_priv" ]] || touch $HOME/.${file}
       if [ -d "${dest_path}${file}" ]; then
           cp -LR "${dest_path}${file}" "${bak_dir}/.config"
           echo -n "Backing up and deleting ${dest_path}${file}\n"
@@ -247,7 +248,7 @@ function homefiles_setup() {
 # install_prezto
 # install_asdf
 # install_mvenv
-vim_setup
+# vim_setup
 # homefiles_setup
 # git_setup
 # mac_setup

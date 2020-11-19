@@ -18,7 +18,7 @@ fi
 source $HOME/.asdf/asdf.sh
 
 # Load shell functions, exports and other dotfiles
-for file in ~/.{path,functions,extra,exports,aliases}; do
+for file in ~/.{path,functions,extra,exports,exports_priv,aliases}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done
 
