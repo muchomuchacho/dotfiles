@@ -26,6 +26,9 @@ nnoremap <leader>r :exec '!python' shellescape(@%, 1)<cr>
 " coc-todolist
 " nnoremap <leader>tt :CocList todolist<cr>
 
+" Semshi
+nnoremap <silent><leader>rr :Semshi rename<CR>
+
 "" Debugger
 nnoremap <silent><leader>dd :call vimspector#Launch()<CR>
 nnoremap <silent><leader>de :call vimspector#Reset()<CR>
