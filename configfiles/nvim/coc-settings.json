@@ -1,5 +1,5 @@
 {
-  "coc.preferences.formatOnType": true,
+  "python.globalModuleInstallation": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "python",
     "css",
@@ -13,15 +13,11 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     "--line-length",
-    "80"
+    "88"
   ],
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": [
-    "--line-length",
-    "80"
-  ],
   "python.jediEnabled": false,
   "git.addedSign.hlGroup": "GitGutterAdd",
   "git.changedSign.hlGroup": "GitGutterChange",
