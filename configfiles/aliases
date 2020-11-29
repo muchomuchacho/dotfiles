@@ -27,6 +27,7 @@ alias homevpn='sshuttle --dns -r homevpn 0/0'
 alias plex='ssh plex'
 alias xenial='ssh xenial'
 alias zeus='ssh zeus'
+alias edge='ssh -c aes128-cbc rafa@172.24.7.1'
 
 # toolkit
 alias ssh-eai="ssh -t -p 2222 toolkit@localhost '/usr/bin/zsh'"
