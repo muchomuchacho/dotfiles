@@ -13,7 +13,7 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     "--line-length",
-    "88"
+    "79"
   ],
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
