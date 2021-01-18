@@ -22,6 +22,8 @@ template = """# {date}
 
 ## Input
 * **Reading**:
+    * Paper: [Current](/Reading#Current)
+    * Book: [Current](/Reading#Tech Books)
 * **Listening**:
 * **Watching**:
 * **Eating**:
@@ -36,7 +38,6 @@ template = """# {date}
 * What did you lean today?"""
 
 # Get the date from datetime or from the filename
-date = (datetime.date.today() if len(sys.argv) < 2
-        else Path(sys.argv[1]).stem)
+date = datetime.date.today() if len(sys.argv) < 2 else Path(sys.argv[1]).stem
 
 print(template.format(date=date))

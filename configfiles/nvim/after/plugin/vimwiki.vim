@@ -2,7 +2,7 @@ augroup md_wiki
   autocmd!
   autocmd BufNewFile *md_wiki/diary/*.md :silent 0r !generate-vimwiki-diary-template '%'
   autocmd BufRead *md_wiki/home.md :Git pull
-  autocmd BufRead *md_wiki/home.md call AddLinkToListening()
+  autocmd BufRead *md_wiki/home.md call AddLinkToReading()
   autocmd BufWritePost *md_wiki/* call RunGitCommands()
 augroup END
 
@@ -27,13 +27,13 @@ function! RunGitCommands() abort
   endif
 endfunction
 
-" Add link to Listening after line
-function! AddLinkToListening() abort
-  let mark_line =  search('\[Listening\]')
+" Add link to Reading after line
+function! AddLinkToReading() abort
+  let mark_line =  search('\[Reading\]')
   if mark_line
     call deletebufline(bufnr("%"), mark_line)
   endif
   let w = search('### Active')
-  exec w . "pu='* [Listening](/diary/'.strftime('%F').'#Listening)'"
+  exec w . "pu='* [Reading](/diary/'.strftime('%F').'#Reading)'"
   silent update
 endfunction
