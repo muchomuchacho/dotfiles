@@ -17,6 +17,8 @@ template = """# {date}
 * [ ] Exercise
 * [ ] Meditate
 * [ ] Read
+  * [ ] Fiction
+  * [ ] A paper
 
 * [Currently doing](/home#Active)
 
