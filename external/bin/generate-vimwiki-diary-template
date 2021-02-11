@@ -8,25 +8,29 @@ from pathlib import Path
 template = """# {date}
 
 ## Morning Journal
-* What should be the highlight of the day
-* What's on your mind
+* *What should be the highlight of the day*
+    >
+* *What's on your mind*
+    >
 
-## Todo
+## Schedule
 
-* [ ] Stretch
-* [ ] Exercise
-* [ ] Meditate
-* [ ] Read
-  * [ ] Fiction
-  * [ ] A paper
+* [ ] `6:30 -  7:30`  -> Morning routine: Stretch, Journal, Meditate, Eat
+* [ ] `7:30 -  8:00`  -> [Read a paper](/Reading#Current)
+* [ ] `8:00 -  10:00` -> Deep Work
+* [ ] `10:00 - 10:00` -> Coffee, Snack
+* [ ] `10:30 - 13:00` -> Deep Work
+* [ ] `13:00 - 14:00` -> Workout, Eat
+* [ ] `14:00 - 14:30` -> Emails, Messages, etc
+* [ ] `14:30 - 17:00` -> Meetings, Light work
+* [ ] `17:00 - 19:00` -> Deep Work
+* [ ] `19:00 - 19:15` -> Emails, Messages
 
 * [Currently doing](/home#Active)
 
 ## Input
-* **Reading**:
-    * Paper: [Current](/Reading#Current)
-    * Book: [Current](/Reading#Tech Books)
-* **Listening**:
+* **Reading**: [Read a paper](/Reading#Current)
+* **Learnin**: [Currently](/Learning#Current)
 * **Watching**:
 * **Eating**:
 
