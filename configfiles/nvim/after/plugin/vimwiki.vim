@@ -34,6 +34,6 @@ function! AddLinkToReading() abort
     call deletebufline(bufnr("%"), mark_line)
   endif
   let w = search('### Active')
-  exec w . "pu='* [Reading](/diary/'.strftime('%F').'#Reading)'"
+  exec w . "pu='* [Reading](/diary/'.strftime('%Y-%m-%d').'#Reading)'"
   silent update
 endfunction
