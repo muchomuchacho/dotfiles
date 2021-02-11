@@ -13,11 +13,15 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     "--line-length",
-    "79"
+    "119"
   ],
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--line-length",
+    "119"
+  ],
   "python.jediEnabled": false,
   "git.addedSign.hlGroup": "GitGutterAdd",
   "git.changedSign.hlGroup": "GitGutterChange",
