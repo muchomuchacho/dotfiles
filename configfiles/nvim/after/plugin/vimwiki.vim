@@ -1,6 +1,8 @@
 augroup md_wiki
   autocmd!
   autocmd BufNewFile *md_wiki/diary/*.md :silent 0r !generate-vimwiki-diary-template '%'
+  autocmd BufRead,BufNewFile *md_wiki/diary/*.md call AppendToDo()
+  autocmd BufWritePre,FileWritePre *md_wiki/diary/*.md call FeedBackToDoChanges()
   autocmd BufRead *md_wiki/home.md :Git pull
   autocmd BufRead *md_wiki/home.md call AddLinkToReading()
   autocmd BufWritePost *md_wiki/* call RunGitCommands()
@@ -36,4 +38,22 @@ function! AddLinkToReading() abort
   let w = search('### Active')
   exec w . "pu='* [Reading](/diary/'.strftime('%Y-%m-%d').'#Reading)'"
   silent update
+endfunction
+
+function! AppendToDo() abort
+  let curr_file = "/diary/".strftime('%Y-%m-%d').".md"
+  let mark_1 = search('## ToDo')
+  let mark_2 = search('## Input')
+  if mark_1
+    call deletebufline(bufnr("%"), mark_1, mark_2 - 1)
+  endif
+  let fl = readfile("ToDo.md", "b")
+  call appendbufline("/diary/".strftime('%Y-%m-%d').".md", 22, fl)
+endfunction
+
+function! FeedBackToDoChanges() abort
+  let mark_1 = search('## ToDo')
+  let mark_2 = search('## Input')
+  let text = getbufline("/diary/".strftime('%Y-%m-%d').".md", mark_1, mark_2 - 1)
+  call writefile(text, "ToDo.md", "b")
 endfunction
